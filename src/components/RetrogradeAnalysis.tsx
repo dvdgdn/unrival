@@ -182,22 +182,6 @@ const RetrogradeAnalysis = () => {
         <li><strong>90-day targets:</strong> 1,500–3,000 promises; KPw 300–600; GCR 54–60%; PIS ≥80%; Audit ≥90%; ≥1 civic stakeholder exploring a pilot.</li>
       </ul>
 
-      <h3>12) Sample Artifacts (user-level & civic)</h3>
-      <ArtifactBox title="Promise Receipt (human-readable)">
-        Actor: Amina K.<br />
-        Goal: 20 × 45-min B2 German sessions by 15 Dec 2025<br />
-        Evidence: Focus-app logs + calendar + 2 peer check-ins/week<br />
-        Assistant: Marta (hypnosis-informed study coach)<br />
-        Privacy: Public status / Private evidence<br />
-        Consequence: Renegotiate to 30-min blocks if &lt;3 sessions/week ×2 weeks<br />
-        Status: Kept (22 sessions) — Receipt: 0x…c91 (timestamp) — Attesters: Lea S., Omar R.
-      </ArtifactBox>
-      <ArtifactBox title="City Pledge (civic NRG)">
-        Repair 50 playground hazards by 30 Mar 2026<br />
-        Evidence: work orders + photo verifications; observers: neighborhood councils; dashboard auto-updates<br />
-        Status: Renegotiated → Kept (52 repairs; timeline extended 10 days with versioned reason code)
-      </ArtifactBox>
-
       <h4>Bottom Line</h4>
       <p>Starting from the 2027 facts, the only robust path back to Q3-2025 is: prove outcomes at the smallest unit (promises), protect integrity with protocol + governance, scale with TOC discipline, package the behavior in a meme that travels, and translate the same grammar from people to cities. This document enumerates the milestones, numbers, controls, and forks that make that path both necessary and sufficient.</p>
 
