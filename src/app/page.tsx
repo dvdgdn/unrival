@@ -3,12 +3,15 @@ import LetterDisplay from '../components/LetterDisplay';
 import TechniqueBox from '../components/TechniqueBox';
 import VideoPlayer from '../components/VideoPlayer';
 import RetrogradeAnalysis from '../components/RetrogradeAnalysis';
+import InquiryCTA from '../components/InquiryCTA';
 
 export default function Home() {
   return (
     <>
       <FloatingNav />
       <div className="container">
+        <InquiryCTA />
+
         <h1>A Letter from 2027</h1>
         <p className="metadata">A Vision of the Unrival Movement</p>
         <p className="read-time">Estimated Read Time: 3 minutes</p>
@@ -49,11 +52,10 @@ export default function Home() {
           </TechniqueBox>
         </section>
 
-        <section id="the-plan">
-          <RetrogradeAnalysis />
-        </section>
-
       </div>
+      <section id="the-plan">
+        <RetrogradeAnalysis />
+      </section>
     </>
   );
 }

@@ -5,15 +5,16 @@ import Image from 'next/image';
 import IcebergIllustration from './IcebergIllustration';
 import FourFrontsDiagram from './FourFrontsDiagram';
 import PromiseLifecycle from './PromiseLifecycle';
+import InlineInquiryCTA from './InlineInquiryCTA';
 
 const LetterDisplay = () => {
   return (
     <article className="letter-display prose prose-neutral max-w-none">
       {/* ... other sections remain the same ... */}
       <header>
-        <p className="date">
-          <time dateTime="2027-09-16">September 16, 2027</time>
-        </p>
+        <div className="date">
+          <h3>Autumnal Equinox, 2027</h3>
+        </div>
         <p className="salutation">
           Dear changemaker and exhausted inhabitant of the tumultuous third quarter of 2025,
         </p>
@@ -155,6 +156,7 @@ const LetterDisplay = () => {
         <p>
           The race isn't just to awaken agency—it's to integrate it across every dimension of change. That's the real promise of Unrival: not a single solution, but a unified approach to the magnificent, messy work of human transformation.
         </p>
+        <InlineInquiryCTA />
       </section>
       <footer>
         <p>Keep running. We're waiting for you on the other side.</p>
