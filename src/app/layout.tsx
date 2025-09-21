@@ -23,9 +23,10 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Letter from the Future & Retrograde Analysis",
-  description: "A Vision of the Unrival Movement",
+  title: "Converging Futures • Letters & Promises | Unrival",
+  description: "Converge many Letters from the Future into a shared vision via public promises toward specific letters.",
 };
+
 
 export default function RootLayout({
   children,
