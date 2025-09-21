@@ -1,0 +1,79 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 6 of 12: The Theoretical Foundation, Part 1
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Our system now has a reliable stream of evidence. This week, our mission is two-fold. First, we will build the "brain" that interprets this evidence: a safe, sandboxed *Assessment Engine* that can execute business rules. Second, we will begin our ascent into the most challenging and rewarding part of the book, laying the theoretical foundation for coordination, consensus, and replication that we'll need in the coming weeks.
+
+* Learning Plan 📚
+This is a heavier reading week paired with a self-contained building task. The goal is to absorb these foundational coordination concepts so they are ready to be applied later.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 8: Time* in /Understanding Distributed Systems/.
+     - *Focus On*: The difference between physical, logical (Lamport), and vector clocks. Grasp the core problem: you can't trust wall-clock time to order events across different machines.
+   - [ ] Read *Chapter 9: Leader election* in /Understanding Distributed Systems/.
+     - *Focus On*: The state machine of the Raft leader election (Follower, Candidate, Leader). Understand that leader election is a foundational problem that must be solved before you can achieve consensus on data.
+   - /Why this now?/: We are starting our journey into Part II of the book, in order. These two chapters are the direct prerequisites for understanding data replication (Chapter 10), which we will tackle next week.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+This week's build is all about the Assessment Engine (Original Step 7). We'll design our own tiny, safe programming language to evaluate our standards.
+
+** TODO [#A] Step 6.1: Write the BDD Feature Tests
+   A good engine must correctly evaluate valid rules and safely reject invalid ones. Our tests will define both behaviors.
+
+   - [ ] Create a new Gherkin feature file for the Assessment Engine.
+   - [ ] Write scenarios for both the "happy path" and the crucial "security path."
+     #+BEGIN_SRC gherkin
+     Feature: Punctual Start Assessment
+
+       Background:
+         Given a session was scheduled for "2025-10-10T10:00:00Z"
+         And the "Punctual Start" standard is defined by the expression: "(client.join_time - scheduled_start_time) <= 120"
+
+       Scenario: A punctual client passes the assessment
+         Given the client joined at "2025-10-10T10:01:30Z" (90 seconds late)
+         When the Assessment Engine evaluates the "Punctual Start" standard
+         Then the result is "pass"
+         And an Assessment is created with a reason like "Client was 90 seconds late, within the 120s grace period."
+
+       Scenario: A malicious expression is safely rejected
+         Given a maliciously crafted standard is submitted, like: "database.delete_all_users()"
+         When the Assessment Engine attempts to evaluate the malicious standard
+         Then the engine immediately rejects the expression as invalid before running it
+         And no Assessment is created
+     #+END_SRC
+
+** TODO [#B] Step 6.2: Design and Implement the Assessment Engine
+   We will build the engine in three stages: designing the language, parsing it into a structure, and safely evaluating that structure.
+
+*** TODO Design the Tiny DSL (Domain-Specific Language)
+    - *Key Concept: DSL*. A DSL is like ordering at a *fancy coffee shop*. You don't use full English; you use a tiny, efficient language: "Grande double-shot latte." Our DSL will be just for expressing assessment rules.
+    - [ ] Define the grammar for your language.
+      - What variables will be available? (e.g., `client.join_time`, `coach.join_time`, `scheduled_start_time`).
+      - What operators will be allowed? (e.g., `-`, `+`, `<=`, `==`).
+      - Keep it as small as possible!
+
+*** TODO Implement the Parser (String to AST)
+    - *Key Concept: Parsing and AST (Abstract Syntax Tree)*. Parsing is like *diagramming a sentence*. It turns a flat string of text into a tree structure (the AST) that represents its logical meaning. The engine doesn't work with the raw string; it works with this much smarter tree structure. 
+    - [ ] Choose a parsing library (like `nearley` or `chevrotain` for JS/TS) or write a very simple recursive descent parser for your tiny grammar.
+    - [ ] The parser's job is to take a string like `"(a - b) <= 120"` and turn it into a data structure like:
+      #+BEGIN_SRC json
+      {
+        "type": "LessThanOrEqual",
+        "left": {
+          "type": "Subtract",
+          "left": { "type": "Variable", "name": "a" },
+          "right": { "type": "Variable", "name": "b" }
+        },
+        "right": { "type": "Literal", "value": 120 }
+      }
+      #+END_SRC
+
+*** TODO Implement the Sandboxed Evaluator (AST to Result)
+    - *Key Concept: Sandboxing*. This is a security mechanism for running code in a restricted environment. It's like a *child's padded playpen*. The code can play with approved toys (our variables and operators) but can't touch anything dangerous outside the playpen (the database, the file system).
+    - [ ] Write an `evaluate` function that takes the AST (from the parser) and the evidence data as input.
+    - [ ] This function will "walk" the AST recursively. When it sees a `Subtract` node, it evaluates the left and right children and subtracts the results. When it sees a `Variable` node, it looks up the value from the evidence data.
+    - [ ] *Crucially*, if it encounters a variable or operator that isn't on its approved list, it must immediately throw a validation error. *Never use a generic `eval()` function!* This is the core of the sandbox.
+    - [ ] The function should return the final boolean result of the expression.

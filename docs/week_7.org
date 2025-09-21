@@ -1,0 +1,65 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 7 of 12: The Living Scorecard & Widget Backend
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Last week, we built our Assessment Engine and began our deep dive into the theory of distributed coordination. This week, our mission is two-fold. First, we will build the "living" part of the system—the `Scorecard` that evolves over time with *decay* and *forgiveness*. Second, we will build the foundational backend infrastructure for a new feature: an embeddable *coach widget* that allows coaches to submit evidence directly from their own websites.
+
+* Learning Plan 📚
+With a solid understanding of time and leader election, you are now ready to tackle the main event: making multiple machines agree on the same data.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 10: Replication* in /Understanding Distributed Systems/.
+     - *Focus On*:
+       - [cite_start]*State Machine Replication (10.1)* [cite: 1243][cite_start]: Understand that if identical, deterministic state machines get the same inputs in the same order, they will all end up in the same state[cite: 1253].
+       - [cite_start]*The Replicated Log*: Grasp that the leader achieves consensus by writing operations to an ordered log and then replicating that log[cite: 1269].
+       - [cite_start]*Consistency Models (10.3)*[cite: 1409]: Note the differences between strong, sequential, and eventual consistency.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+This week, we build the core Scorecard logic and the API for our new widget feature.
+
+** TODO [#A] Step 7.1: Write the BDD Feature Tests
+   We need tests for both of this week's features: the scorecard's evolution and the new evidence endpoint.
+
+   - [ ] Write the scenario that uses time-travel to test decay and forgiveness.
+     #+BEGIN_SRC gherkin
+     Feature: A Scorecard that Evolves Over Time
+
+       Scenario: A coach's score decays and is rewarded for monthly consistency
+         Given a coach has a Reliability Index (RI) score of 0.850 on October 25th, 2025
+         When the system Clock advances to November 1st, 2025
+         And the daily scoring job runs
+         Then the "Monthly Forgiveness" bonus is applied
+     #+END_SRC
+   - [ ] Write a scenario to test the new, secure evidence submission endpoint.
+     #+BEGIN_SRC gherkin
+     Feature: Coach-Generated Evidence Submission
+
+       Scenario: A coach submits evidence via a secure widget endpoint
+         Given a session with ID "sess_123" exists
+         And a short-lived, secure token has been generated for that session
+         When the coach sends a POST request to "/api/sessions/sess_123/evidence" with the valid token
+         And the payload contains '{"type": "RECAP_SENT_BY_COACH"}'
+         Then the system accepts the request
+         And an "EvidenceIngested" event is recorded in the outbox
+     #+END_SRC
+
+** TODO [#B] Step 7.2: Implement the `Scorecard` Aggregate & Time-Based Logic
+   This is the core domain model for a coach's reputation, including the logic that makes it "live."
+
+   - [ ] Create the =Scorecard.ts= aggregate root class.
+   - [ ] Implement `applyDelta()`, `decayTo(now: Date)`, and `monthlyForgiveness(now: Date)` methods.
+   - [ ] Implement the *exponential decay* formula inside `decayTo`.
+   - [ ] Implement the logic to check for perfect months inside `monthlyForgiveness`.
+   - [ ] Create the idempotent daily background job (`ApplyDailyDecayHandler`) that calls these methods.
+
+** TODO [#C] Step 7.3: Build Backend Support for the Coach Widget
+   We will build the secure endpoint and authentication mechanism for the widget. The endpoint will reuse our existing ingestion logic.
+
+   - [ ] *Design the Security*: Plan a mechanism to generate secure, short-lived, single-purpose tokens (e.g., JWTs) that are tied to a specific `sessionId` and `coachId`.
+   - [ ] Create a new API endpoint, e.g., =POST /api/sessions/:sessionId/evidence=.
+   - [ ] Add an authentication guard to this endpoint that validates the incoming token.
+   - [ ] Have the endpoint's handler format the incoming data into your standard "evidence" format.
+   - [ ] *Reuse, Don't Rebuild*: Pass the formatted evidence to the *exact same* evidence ingestion service you built in Week 5. It will handle deduplication, persistence, and firing the `EvidenceIngested` event via the outbox.

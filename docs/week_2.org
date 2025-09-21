@@ -1,0 +1,72 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 2 of 12: The First Booking
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Last week, we built our "factory." This week, we use that factory to produce our first tangible product: a working, end-to-end feature. We will build a "vertical slice" of the application, from the public API endpoint all the way down to the database. By the end of this week, a client will be able to send a web request and successfully book a new coaching session, proving that our architecture, primitives, and CI/CD pipeline all work together. This is the first step in bringing the application to life.
+
+* Learning Plan 📚
+With our foundation set, we now dive into the first major theoretical concept of our business logic: how to save data safely.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 12: Transactions* in /Understanding Distributed Systems/.
+     - *Focus On*:
+       - [cite_start]The *ACID* properties, especially *Atomicity* (all-or-nothing) and *Isolation* (transactions don't interfere with each other)[cite: 1703, 1704, 1713].
+       - [cite_start]The different types of race conditions that Isolation prevents (e.g., dirty writes, dirty reads)[cite: 1722].
+       - [cite_start]The concept that stronger isolation levels are safer but can be slower[cite: 1729].
+     - /Why this now?/: When you call =repository.save()= this week, it's not magic. Your database is using a transaction to guarantee that the operation is atomic and durable. Understanding this chapter is key to trusting your persistence layer.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+This week is a perfect example of "Outside-In" development. We will start with a failing acceptance test and write just enough code in each layer to make it pass.
+
+** TODO [#A] Step 2.1: Write the BDD Feature Test
+   We begin by describing the desired behavior from the user's perspective. This test will fail initially and will be our guide for the entire week.
+
+   - [ ] Create a new Gherkin feature file for the booking functionality.
+   - [ ] Write the scenario that describes a successful booking. This is our target.
+     #+BEGIN_SRC gherkin
+     Feature: Book a coaching session
+       Scenario: Client books a 60-minute session
+         When I POST "/sessions" with price €110, deposit 50%, start "2025-10-10T10:00:00Z"
+         Then I receive a 201 Created response with the new sessionId
+         And the session with that ID exists in the database in a "BOOKED" state
+         And a "SessionBooked" event has been recorded in the outbox table
+     #+END_SRC
+   - [ ] Run the test and watch it fail. This is our starting point.
+
+** TODO [#B] Step 2.2: Implement the Presentation Layer (The Storefront)
+   This layer is the public-facing entrance to our application. It's responsible for handling raw web requests and translating them into a clean, structured format.
+
+   - *Key Concept: DTO (Data Transfer Object)*: A DTO is like a *customs declaration form*. It's a simple, dumb container for data that crosses the boundary into our application. [cite_start]It has no logic, just fields and validation rules. [cite: 586]
+   - [ ] Create the controller that will handle the =POST /sessions= route.
+   - [ ] Define the =BookSessionDto.ts= class with properties for =price=, =depositPct=, =startTime=, etc.
+   - [ ] Add validation decorators (e.g., using `class-validator` or a `zod` schema) to the DTO to ensure incoming data is valid (e.g., `price` must be a positive number).
+
+** TODO [#B] Step 2.3: Implement the Application Layer (The Manager)
+   This layer orchestrates the business process. It receives a clean DTO from the Presentation layer and coordinates the domain and infrastructure layers to get the job done.
+
+   - [ ] Create the "Use Case" or "Handler" for booking a session (e.g., =BookSessionHandler.ts=).
+   - [ ] The handler's `execute` method will take the validated DTO as input.
+   - [ ] Inside the handler, map the data from the DTO into the domain primitives you built last week (e.g., create a `Money` object from the price).
+
+** TODO [#C] Step 2.4: Implement the Domain Layer (The Secret Recipe)
+   This is the heart of your application. It contains the core business logic and rules, completely independent of any framework or database.
+
+   - *Key Concept: Aggregate*: An Aggregate is a cluster of objects that are treated as a single unit, protecting their own consistency. Your `Session` object is an Aggregate. [cite_start]It's not just a bag of data; it enforces its own rules (invariants). [cite: 1201]
+   - [ ] Create the `Session.ts` aggregate root class in your =packages/domain= folder.
+   - [ ] Add a static factory method, e.g., `Session.book(...)`, which contains the business logic for creating a new session. This is the *only* way a valid session can be created.
+   - [ ] Inside the `book` method, enforce invariants (e.g., "a session cannot be booked in the past").
+   - [ ] After a successful booking, have the `Session` aggregate record a `SessionBooked` domain event.
+
+** TODO [#C] Step 2.5: Implement the Infrastructure Layer (The Plumbing)
+   This layer contains the technical details of how to talk to the outside world, like the database.
+
+   - *Key Concept: Repository Pattern*: The repository is like a *librarian*. [cite_start]Your application logic doesn't need to know how the library (database) is organized; it just asks the librarian (`repository`) to save or find a book (`Session`). [cite: 193]
+   - [ ] Define the `SessionRepository` *interface* in the Domain layer. This is the contract.
+   - [ ] Create the database migration script to add the `sessions` and `outbox` tables.
+   - [ ] In the Infrastructure layer, create a concrete `PostgresSessionRepository` class that implements the interface.
+   - [ ] Implement the `save` method. This method will use a database transaction to save both the `Session` entity to the `sessions` table and its recorded domain events to the `outbox` table.
+   - [ ] Wire everything together using dependency injection.
+   - [ ] Run your acceptance test from Step 2.1 again. If all layers are working correctly, it should now pass!

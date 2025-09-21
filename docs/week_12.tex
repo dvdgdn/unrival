@@ -1,0 +1,107 @@
+% Created 2025-09-17 Wed 08:42
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\author{Your Software Pedagogue}
+\date{\today}
+\title{Promise Protocol v1 — The Guided Tour\\\medskip
+\large Week 12 of 12: Drills, Polish \& Buffer}
+\hypersetup{
+ pdfauthor={Your Software Pedagogue},
+ pdftitle={Promise Protocol v1 — The Guided Tour},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 30.1 (Org mode 9.7.11)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\section{This Week's Mission 🎯}
+\label{sec:org1f90b45}
+The application is built, deployed, and observable. But is it truly resilient? \textbf{Thinking} a system is resilient is not the same as \textbf{knowing} it is. This week, our mission is to gain that knowledge through practice. We will conduct "disaster drills" to test our assumptions and automated systems. We will write clear instructions—runbooks—for future human operators. And finally, we will use this week as a buffer to polish our work and ensure we finish with a system that is not only complete but truly production-ready.
+\section{Learning Plan 📚}
+\label{sec:org34fedbe}
+To prepare for our disaster drills, we need to know what kind of disasters to simulate. This week's reading provides a menu of common real-world failures.
+\subsection{{\bfseries\sffamily TODO} Reading Assignment}
+\label{sec:org599804a}
+\begin{itemize}
+\item[{$\square$}] Read \textbf{Chapter 24: Common failure causes} in \emph{Understanding Distributed Systems}.
+\begin{itemize}
+\item \textbf{Focus On}:
+\begin{itemize}
+\item {[}cite\_start]The different categories of faults: hardware faults, configuration changes, network faults, resource leaks, and especially \textbf{cascading failures}{[}cite: 2833, 2847, 2869, 2882, 2908].
+\item {[}cite\_start]The concept of "gray failures"[cite: 2877]: subtle, partial degradations that are hard to detect.
+\item {[}cite\_start]The idea that incorrect error handling is a primary cause of major outages[cite: 2842].
+\end{itemize}
+\item \emph{Why this now?}: This chapter is your playbook for this week's main activity: Chaos Engineering. It gives you a list of realistic failure scenarios to inject into your system to see if it responds as you expect.
+\end{itemize}
+\end{itemize}
+\section{Building Plan: A Step-by-Step Guide 🛠️}
+\label{sec:org7cd86f8}
+This week is about validation and preparation, not writing new feature code.
+\subsection{{\bfseries\sffamily TODO} Step 12.1: Write the Team Runbooks}
+\label{sec:orgea3abd3}
+When an alert fires at 3 AM, the on-call engineer shouldn't be debugging from scratch. They need a clear, calm checklist to follow. That checklist is a runbook.
+
+\begin{itemize}
+\item \textbf{Key Concept: Runbook}. It's like an \textbf{airplane pilot's emergency checklist}. ✈️ When an engine fails, the pilot doesn't rely on memory; they pull out a laminated checklist and follow the steps precisely. A runbook is that checklist for a specific production alert.
+\item[{$\square$}] For each critical alert you configured in Week 11 (e.g., "High API Error Rate," "High Payment Latency"), create a corresponding runbook document.
+\item[{$\square$}] Each runbook should contain:
+\begin{itemize}
+\item A summary of what the alert means.
+\item The immediate first steps to take (e.g., "Check the status of the PSP," "Look at the main service dashboard").
+\item Links to the relevant dashboards.
+\item Queries to run against your logs or traces to find more information.
+\item Known mitigation steps (e.g., "If this is caused by a bad deployment, initiate a rollback using this procedure\ldots{}").
+\end{itemize}
+\end{itemize}
+\subsection{{\bfseries\sffamily TODO} Step 12.2: Conduct Disaster Drills (Chaos Engineering)}
+\label{sec:org23ebe51}
+Now, we test our system and our runbooks. We will intentionally inject failures into our production-like staging environment to see what happens.
+
+\begin{itemize}
+\item \textbf{Key Concept: Chaos Engineering}. This is like a \textbf{fire drill for your application}.  You don't wait for a real fire to find out if the alarm works and if people know the escape routes. You practice. Chaos Engineering is the disciplined practice of experimenting on a system in order to build confidence in its ability to withstand turbulent conditions.
+\item[{$\square$}] Schedule a "Game Day" with a clear plan of what you will test. Announce it so no one is surprised.
+\item[{$\square$}] \textbf{Drill 1: Downstream Dependency Outage}
+\begin{itemize}
+\item -[ ] Simulate the PSP being unavailable (e.g., by adding a network rule to block traffic to the Stripe API).
+\item -[ ] \textbf{Expected Outcome}: The circuit breaker on your PSP gateway should trip. The "High Payment Latency" alert should fire. Your runbook for this alert should be useful. The system should gracefully degrade without crashing.
+\end{itemize}
+\item[{$\square$}] \textbf{Drill 2: Database Failover}
+\begin{itemize}
+\item -[ ] Simulate a database replica failure (e.g., by manually killing the primary database pod in Kubernetes).
+\item -[ ] \textbf{Expected Outcome}: Your managed database service should automatically fail over to a healthy replica. Your application may see a brief spike in errors but should recover automatically without manual intervention.
+\end{itemize}
+\item[{$\square$}] \textbf{Drill 3: Cascading Failure / Resource Leak}
+\begin{itemize}
+\item -[ ] Simulate a "poison pill" request that causes one of your API pods to enter a high-CPU or high-memory state.
+\item -[ ] \textbf{Expected Outcome}: The pod's health check should eventually fail. Kubernetes should kill the unhealthy pod and start a new, healthy one. The load balancer should have routed traffic away from the failing pod, causing minimal impact to users.
+\end{itemize}
+\end{itemize}
+\subsection{{\bfseries\sffamily TODO} Step 12.3: Final Polish \& Buffer Time}
+\label{sec:org0f89819}
+No project plan is perfect. This final set of tasks is for handling the loose ends and absorbing any delays from the previous 11 weeks.
+
+\begin{itemize}
+\item[{$\square$}] Address any bugs, flaky tests, or weaknesses you discovered during the disaster drills.
+\item[{$\square$}] Update your runbooks with the lessons you learned from the drills.
+\item[{$\square$}] Review and finalize all project documentation (e.g., your READMEs, architectural decision records).
+\item[{$\square$}] Clean up any remaining technical debt.
+\item[{$\square$}] Use this time to catch up on any tasks from previous weeks that may have spilled over.
+\item[{$\square$}] \textbf{Congratulations!} At the end of this week, you have a feature-complete, well-documented, and battle-tested system.
+\end{itemize}
+\end{document}

@@ -1,0 +1,68 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 9 of 12: The Vault
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Our system is now feature-complete and intelligent. This week, we begin the final phase of the project, focusing on the features that build deep user trust. Our mission is to build the "vault" for our user data, ensuring we are responsible custodians of their information as required by regulations like GDPR. We will build a *consent gate* to ensure we only process sensitive data with explicit permission, a tool for users to *request their data (DSAR)*, and an automated job to *delete old data (retention)*. This work is not just a legal requirement; it's a fundamental pillar of user trust.
+
+* Learning Plan 📚
+This week's reading introduces an advanced but powerful mental model for designing robust systems by separating the "management" logic from the "request-handling" logic.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 22: Control planes and data planes* in /Understanding Distributed Systems/.
+     - *Focus On*:
+       - The fundamental separation: The *data plane* is on the critical path of handling user requests, while the *control plane* is responsible for configuration and management.
+       - The scale imbalance: The data plane typically handles orders of magnitude more traffic than the control plane.
+       - Static stability: The data plane should be designed to continue functioning with a stale configuration if the control plane becomes unavailable.
+     - /Why this now?/: This provides a perfect architectural model for your consent feature. The user's consent status is a piece of *configuration* managed by a "control plane." Your services that process evidence are the "data plane" and must check this configuration before acting.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+We'll build our data vault in three parts: controlling what comes in, providing access to what's stored, and safely deleting what's old.
+
+** TODO [#A] Step 9.1: Write the BDD Feature Tests for the Consent Gate
+   Our primary test will define the behavior of the consent gate, which acts as a guard for sensitive data.
+
+   - [ ] Create a new Gherkin feature file for consent logic.
+   - [ ] Write the scenarios for both states: with and without consent.
+     #+BEGIN_SRC gherkin
+     Feature: Explicit Consent is Required for Sensitive Data
+
+       Scenario: A client without consent cannot submit subjective evidence
+         Given a client has NOT given explicit consent for subjective data processing
+         When that client attempts to submit a subjective self-report for their session
+         Then the system rejects the request with a "403 Forbidden: consent_required" error
+         And no evidence from that self-report is stored in the database
+
+       Scenario: A client with consent can submit subjective evidence
+         Given a client has previously given explicit, opt-in consent
+         When that client attempts to submit a subjective self-report for their session
+         Then the system accepts the request with a "201 Created" response
+         And the subjective evidence is successfully stored in the database
+     #+END_SRC
+
+** TODO [#B] Step 9.2: Implement the Consent Gate
+   This is the guard at the door for sensitive information. For extra-sensitive data (like health or personal beliefs, covered under GDPR's Art. 9), you need a user's explicit, opt-in permission. It's like needing a specific key to open someone's *personal diary*; general permission isn't enough. 
+
+   - [ ] Create a database migration for a new table to store user consent status (e.g., =user_consents= with =user_id=, =consent_type=, =granted_at_timestamp=).
+   - [ ] In your API, create a middleware or add logic to the relevant controller that runs before processing any subjective evidence.
+   - [ ] This "gate" logic must check the =user_consents= table for a valid, active consent record for that user.
+   - [ ] If consent is not found, reject the request as described in the Gherkin test.
+
+** TODO [#C] Step 9.3: Implement the DSAR Export Tool
+   This tool fulfills a user's "right to access" their data. A DSAR (Data Subject Access Request) is a user's right to ask, "What information do you have about me?" Your response must be complete and organized, like a *detailed bank statement* listing every transaction.
+
+   - [ ] Build an internal script or a secure, authenticated API endpoint that takes a =user_id= as input.
+   - [ ] The script will query all relevant tables (=sessions=, =evidence=, =scorecards=, etc.) to find all records associated with that user.
+   - [ ] Implement logic to *redact* (black out) any personal information of other users from the export to protect their privacy.
+   - [ ] Package all the user's data into a clean, machine-readable JSON file and make it available for download.
+
+** TODO [#C] Step 9.4: Implement the Data Retention & Purge Job
+   This fulfills the "right to be forgotten" and the principle of data minimization. This is like an *office document shredding policy*: "Shred all client files 7 years after their account is closed."
+
+   - [ ] Define your retention policy (e.g., "delete all session-related data 2 years after the session date").
+   - [ ] Create a scheduled background job.
+   - [ ] *Crucially, build a "dry run" mode first.* This mode should identify and log all the data it *would* delete without actually deleting anything. This provides a critical safety check.
+   - [ ] After verifying the "dry run" is correct, implement the "live" mode that permanently deletes the identified records.
+   - [ ] Ensure the job creates an audit log of its activity (e.g., "Purged 15 records for retention policy on 2025-09-17.").

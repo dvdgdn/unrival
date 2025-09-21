@@ -1,0 +1,95 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 4 of 12: The Judgment
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Last week we tamed the unreliable internet by building a resilient payment gateway. This week, we build the "brain" that will tell that gateway what to do. Our mission is to create a pure, isolated, and perfectly testable =SettlementPolicy= that can look at the outcome of a completed session and make a clear, correct financial decision. This is a "cool-down" week, focused on code quality, correctness, and a deep application of our testing principles.
+
+* Learning Plan 📚
+This week is about application, not acquisition. There is no new reading. Instead, the goal is to consolidate your knowledge and put it into practice.
+
+** TODO Review and Apply
+   - [ ] Review your notes on *Chapter 29: Testing* from /Understanding Distributed Systems/.
+     - *Focus On*: The "Test Pyramid." Notice how this week you will be working at two levels: high-level BDD/acceptance tests that verify the end-to-end outcome, and low-level unit tests that verify the correctness of the policy's calculations with mathematical precision.
+   - [ ] Reflect on the principle of *The Clean Workshop (Layered Architecture)*. This week is the ultimate example of a pure Domain layer component.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+We will build our "brain" in a way that guarantees clarity and correctness, starting with the rules before the code.
+
+** TODO [#A] Step 4.1: Model the Business Rules as a Decision Table
+   Before writing any code, we must understand the logic perfectly. A decision table is a simple, powerful tool for capturing business rules in a clear, unambiguous way.
+
+   - *Key Concept: Decision Table*. It's a way to represent business logic that even non-engineers can understand and validate. It becomes our direct blueprint for both the code and the tests. 
+   - [ ] In a design document or even a simple text file, create a table that maps every possible session outcome to a financial action.
+     #+CAPTION: Settlement Policy Decision Table
+     | Session Outcome            | Action to Take | Amount to Capture             | Receipt Line Item Text                  |
+     |----------------------------+----------------+-------------------------------+-----------------------------------------|
+     | Perfect, completed session | CAPTURE        | 100% of Price - 1% Rebate     | "Zuverlässigkeitsrabatt (1%)"           |
+     | Client is a no-show        | CAPTURE        | 100% of Deposit               | "Einbehalt der Anzahlung (Nicht-Erscheinen)" |
+     | Client cancels 6-24h prior | CAPTURE        | 50% of Deposit                | "Stornogebühr (50% Anzahlung)"          |
+     | Client cancels >24h prior  | VOID_AUTH      | €0                            | "Stornierung (kostenlos)"               |
+
+** TODO [#A] Step 4.2: Write the BDD Feature Tests
+   Now we write high-level tests that verify the *consequences* of our policy. These tests ensure that when the policy makes a decision, the rest of the system (like the PSP gateway and receipt generator) correctly acts on it.
+
+   - [ ] Create a new Gherkin feature file for settlement logic.
+   - [ ] Write a scenario for each of the key outcomes in your decision table.
+     #+BEGIN_SRC gherkin
+     Feature: Settlement Windows & Rebates
+
+       Scenario: A late cancellation results in a partial capture
+         Given an authorized session with a deposit of €55.00
+         When the client cancels 8 hours before the session starts
+         And the settlement process runs
+         Then €27.50 is captured via the Payment Service Provider
+         And the final receipt contains the line "Stornogebühr (50% Anzahlung) — €27,50"
+
+       Scenario: A perfect session results in a rebate
+         Given an authorized session with a price of €110.00
+         And all promises for the session have passed
+         When the settlement process runs
+         Then €108.90 is captured via the Payment Service Provider
+         And the final receipt contains the line "Zuverlässigkeitsrabatt (1%) — -€1,10"
+     #+END_SRC
+
+** TODO [#B] Step 4.3: Implement the Pure SettlementPolicy
+   With the rules and high-level tests defined, we can now build the "brain" itself. We will build it as a *pure function*.
+
+   - *Key Concept: Pure Function*. A pure function is like a perfect *calculator*. Given the same inputs, it *always* returns the same output, and it has no side effects (it doesn't change anything in the outside world, like talking to a database). This makes it incredibly easy to test and trust.
+   - [ ] Create a new =SettlementPolicy.ts= file in your =packages/domain=.
+   - [ ] Create a `decide()` method that takes the session's final state as input (e.g., price, deposit, cancellation time, promise outcomes).
+   - [ ] The `decide()` method must *not* call any external services. It performs its calculations and returns a simple decision object, e.g., `{ action: 'CAPTURE', amount: Money, lines: [...] }`.
+   - [ ] Implement the logic from your decision table inside this method.
+   - [ ] Create an Application Service (e.g., `SettleSessionHandler`) that uses the `SettlementPolicy` to get a decision, and then calls the `PaymentGateway` to execute it.
+
+** TODO [#C] Step 4.4: Write Comprehensive Unit Tests
+   The BDD tests check the whole system; the unit tests put the `SettlementPolicy` "brain" under a microscope to verify its logic with mathematical precision.
+
+   - [ ] Create a unit test file for the `SettlementPolicy`.
+   - [ ] Write a test case for *every single row* of your decision table from Step 4.1.
+   - [ ] Use a table-driven approach (like in the Money tests from Week 1) to keep your tests clean and easy to read.
+     #+BEGIN_SRC typescript
+     // Example of a table-driven test structure
+     const testCases = [
+       {
+         description: 'should capture 50% of deposit for a late cancellation',
+         input: { price: new Money(11000), deposit: new Money(5500), outcome: 'CANCELLED_8H_PRIOR' },
+         expected: { action: 'CAPTURE', amount: new Money(2750) }
+       },
+       // ... one entry for every row in your decision table
+     ];
+
+     describe('SettlementPolicy', () => {
+       testCases.forEach(({ description, input, expected }) => {
+         it(description, () => {
+           const policy = new SettlementPolicy();
+           const decision = policy.decide(input);
+           expect(decision.action).toEqual(expected.action);
+           expect(decision.amount.equals(expected.amount)).toBe(true);
+         });
+       });
+     });
+     #+END_SRC
+   - [ ] Ensure all your unit tests pass, and you have 100% test coverage on the policy logic.

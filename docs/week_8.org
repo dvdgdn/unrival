@@ -1,0 +1,57 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 8 of 12: The Full Picture & Widget Frontend
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Last week, we built our dynamic `Scorecard` and the backend for our coach widget. This week, our mission is to create the "full picture." We will compose our scores into a single *Overall Awesome Score (OAS)* and build its confidence-based display logic. We will also complete the widget feature by creating the new assessment standard and building the frontend component that coaches will embed on their sites.
+
+* Learning Plan 📚
+This is the capstone reading for Part II of the book, exploring leaderless consistency models.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 11: Coordination avoidance* in /Understanding Distributed Systems/.
+     - [cite_start]*Focus On*: The concept of *eventual consistency*, how *Conflict-free Replicated Data Types (CRDTs)* resolve conflicts automatically, and the design of *Dynamo-style data stores*[cite: 1607].
+     - /Why this now?/: The "minimum sample size" rule you'll build this week is a practical way of dealing with data that is not yet fully representative (a form of eventual consistency).
+
+* Building Plan: A Step-by-Step Guide 🛠️
+This week, we complete the scoring logic and the widget feature.
+
+** TODO [#A] Step 8.1: Write the BDD Feature Tests
+   Our tests need to cover both the OAS display logic and the assessment of the new coach-generated evidence.
+
+   - [ ] Write the scenarios for the OAS display rules (hiding the score until a threshold is met).
+     #+BEGIN_SRC gherkin
+     Feature: Overall Awesome Score (OAS) is Displayed Responsibly
+
+       Scenario: OAS is hidden until 3 sessions with subjective evidence are complete
+         Given a coach has completed only 2 sessions with subjective evidence
+         When a user views that coach's scorecard
+         Then the Overall Awesome Score (OAS) section is hidden
+     #+END_SRC
+   - [ ] Write a new scenario for assessing the coach-submitted evidence.
+     #+BEGIN_SRC gherkin
+     Feature: Assess Coach-Generated Evidence
+
+       Scenario: A timely recap submission passes the assessment
+         Given a session ended at "2025-10-20T11:00:00Z"
+         And coach-generated evidence of type "RECAP_SENT_BY_COACH" was ingested at "2025-10-20T15:00:00Z" (4 hours later)
+         When the "Recap ≤24h" standard is evaluated
+         Then the result is "pass"
+     #+END_SRC
+
+** TODO [#B] Step 8.2: Implement the OAS and New Standards
+   We will add the final layers of intelligence to the scoring system.
+
+   - [ ] *Implement New Standard*: In your Assessment Engine, create the new "Recap ≤24h" standard. This involves adding the rule to your DSL registry and ensuring the evaluator can process it.
+   - [ ] *Implement OAS Composition*: Create the logic to calculate the OAS as a *weighted sum* of the underlying scores (RI, EI, etc.).
+   - [ ] *Implement Confidence Rules*: Add the display logic to your API to check the minimum sample size (e.g., 3 sessions) before showing the OAS, and to include the correct confidence label ("Low," "Medium," "High").
+
+** TODO [#C] Step 8.3: Build the Frontend Coach Widget
+   Finally, we build the user-facing part of our new feature.
+
+   - [ ] In your main application, create a page where a logged-in coach can get the embed code for a specific session's widget. This flow must generate the short-lived token.
+   - [ ] Build the embeddable JavaScript widget. It should be a simple component that takes the token and session ID as parameters.
+   - [ ] The widget will display a button (e.g., "Mark Recap Sent").
+   - [ ] When clicked, the widget will make the authenticated `POST` call to the `/api/sessions/:sessionId/evidence` endpoint you built last week.

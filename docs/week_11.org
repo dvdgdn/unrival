@@ -1,0 +1,75 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 11 of 12: Production Readiness
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Our application is smart, fair, and respectful of user data. Now, we must make it *resilient* and *scalable*. Our mission is to build the production cloud environment for our service from the ground up, treating our infrastructure with the same discipline as our code. We will automate the provisioning of all resources, deploy our application to a modern container orchestrator, set up a professional-grade observability stack, and implement a zero-downtime release process.
+
+* Learning Plan 📚
+This is the capstone reading week. You will read the two major parts of the book that deal with scaling and reliability, connecting the theory directly to the infrastructure you are building.
+
+** TODO Reading Assignment
+   - [ ] Read all of *Part III: Scalability (Chapters 14-23)* in /Understanding Distributed Systems/.
+   - [ ] Read all of *Part IV: Resiliency (Chapters 24-28)* in /Understanding Distributed Systems/.
+     - *Focus On*:
+       - *Chapter 18 (Network load balancing)*: The theory behind the Kubernetes Ingress/Services you'll build.
+       - *Chapter 19 (Data storage)*: Understanding how your managed cloud database scales.
+       - *Chapter 21 (Microservices)*: The architectural style you've implemented.
+       - *Chapter 27 & 28 (Downstream/Upstream Resiliency)*: The complete picture of the resiliency patterns you've already touched on.
+     - /Why this now?/: You are about to build the very systems these chapters describe. This reading will provide the complete "why" for every piece of infrastructure you define.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+This week we implement the original Step 13, tackling the core domains of modern Site Reliability Engineering (SRE).
+
+** TODO [#A] Step 11.1: Implement Infrastructure as Code (IaC)
+   We will define our entire cloud environment in code to make it repeatable, testable, and version-controlled.
+
+   - *Key Concept: Infrastructure as Code*. This is like having a detailed *architectural blueprint* for a building instead of just building it by hand. The blueprint (your code) is the single source of truth, allowing you to build identical environments and safely preview changes before applying them.
+   - [ ] Set up Terraform in your =infra/terraform= directory.
+   - [ ] Write Terraform code to define your core resources: a virtual network (VPC), a managed Kubernetes cluster (EKS/AKS/GKE), and a managed PostgreSQL database (RDS/Azure SQL).
+   - [ ] Implement an infrastructure test in your CI pipeline that validates your Terraform plan against your business policies.
+     #+BEGIN_SRC gherkin
+     Feature: Infrastructure Policy Enforcement
+
+       Scenario: All cloud resources must be deployed in EU regions
+         When the Terraform plan is generated for the production environment
+         Then the plan output must not contain any resources outside of "eu-" regions
+         And the deployment is blocked if the check fails
+     #+END_SRC
+
+** TODO [#B] Step 11.2: Deploy the Application to Kubernetes
+   We will package our application into a container and tell our "cloud operating system" how to run it.
+
+   - *Key Concept: Kubernetes*. It's like a *fleet manager* for your applications. You don't tell it which server to run on; you give it a declaration ("I need 3 copies of my API running at all times"), and Kubernetes handles the scheduling, networking, and healing automatically.
+   - [ ] Write a `Dockerfile` for your API application.
+   - [ ] Build the image and push it to a container registry (e.g., Docker Hub, ECR, ACR).
+   - [ ] Write Kubernetes manifest files (YAML) for:
+     - `Deployment`: To declare how many replicas of your app to run.
+     - `Service`: To give your set of replicas a stable internal network address.
+     - `Ingress`: To expose your service to the public internet via a load balancer.
+   - [ ] Set up secure secrets management. Store database passwords and API keys in a secret manager (like AWS/Azure KMS) and inject them into your Kubernetes pods safely. *Do not* store secrets in Git.
+
+** TODO [#C] Step 11.3: Set up the Core Observability Stack
+   We will give our system a "nervous system" so we can understand its health and debug problems.
+
+   - *Key Concept: The Three Pillars of Observability*. It's like the diagnostic system for a modern car.
+     - *Metrics* are the *dashboard* (speed, fuel, temp).
+     - *Logs* are the *mechanic's detailed computer readout* (a chronological event list).
+     - *Traces* are a *GPS tracker on a single drop of fuel* (the end-to-end journey of one request).
+   - [ ] Instrument your API to emit structured, JSON-formatted logs.
+   - [ ] Add instrumentation for key metrics, focusing on the RED metrics for each endpoint: *Rate* (requests per second), *Errors* (count of 5xx responses), and *Duration* (request latency percentiles).
+   - [ ] Add a tracing library (like OpenTelemetry) to your API to generate and export traces.
+   - [ ] Set up a monitoring tool (like Prometheus/Grafana or a managed service like DataDog) to collect and visualize this data.
+   - [ ] Create your first dashboard based on the metrics you're collecting.
+   - [ ] Configure your first alert based on an SLO (e.g., "Alert if the 99th percentile request duration for `/sessions` exceeds 500ms for 5 minutes").
+
+** TODO [#D] Step 11.4: Implement Zero-Downtime Deployments
+   We will create a release process that allows us to update the application without any user-visible interruption.
+
+   - *Key Concept: Blue/Green Deployment*. This is like a *magician's act with two identical stages*. . The live traffic goes to the "Blue" environment. You deploy the new version to the identical "Green" environment, test it, and then flip a single switch (the load balancer) to instantly redirect all new traffic to Green. The audience sees no interruption.
+   - [ ] Update your CI/CD pipeline from Week 1.
+   - [ ] Add a deployment stage that, instead of updating the application in-place, deploys the new version as a separate "green" `Deployment` in Kubernetes.
+   - [ ] Add a "cutover" step that updates the `Ingress` or `Service` to point to the new "green" version.
+   - [ ] Add a final "cleanup" step that tears down the old "blue" version after the new version is confirmed to be healthy.

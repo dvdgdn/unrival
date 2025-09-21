@@ -1,0 +1,73 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 3 of 12: The Money Moves
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Last week, we proved our architecture works by building our first feature. This week, we tackle the highest-risk and most critical part of the entire system: automating a financial transaction with a real-world, external payment provider. We will build the time-based job that authorizes a client's deposit and, crucially, we will wrap our connection to the payment provider in a hardened shell of resiliency patterns. By the end of this week, you will have a system that can reliably handle payments even when the internet is being unpredictable.
+
+* Learning Plan 📚
+This week's reading is laser-focused on the practical patterns needed to safely interact with external services.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 27: Downstream resiliency* in /Understanding Distributed Systems/.
+     - *Focus On*:
+       - *Timeouts (27.1)*: Understand that timeouts are your first line of defense against resource leaks caused by slow network calls.
+       - *Retry (27.2)*: Grasp the "exponential backoff and jitter" strategy. It's not enough to just retry; you must retry intelligently to avoid making a bad situation worse.
+       - *Circuit Breaker (27.3)*: This is a key concept. Understand its three states (Closed, Open, Half-Open) and its role in preventing your application from repeatedly hitting a dependency that is clearly down.
+   - [ ] *Review Chapter 5.7: Idempotency*.
+     - /Why this now?/: You read this in Week 1, but now you will implement it. *Idempotency* is the single most important concept for ensuring financial operations are safe to retry. Internalize it before writing a single line of code that moves money.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+We will build the authorization feature from the outside-in, starting with a test that uses our `FixedClock` to travel through time.
+
+** TODO [#A] Step 3.1: Write the BDD Feature Test for Authorization
+   Our test will describe the system's proactive behavior. It will set up a session in the past and then "fast-forward" the clock to the T-48h mark to see if the system performs the correct action.
+
+   - [ ] Create a new Gherkin feature file for the T-48h authorization functionality.
+   - [ ] Write the scenario that describes the time-based authorization.
+     #+BEGIN_SRC gherkin
+     Feature: Deposit Authorization at T-48h
+
+       Scenario: Authorization occurs exactly at T-48h
+         Given a session has been BOOKED for "2025-10-10T10:00:00Z"
+         And our system has a scheduled job to authorize the deposit for that session at T-48h
+         When the system Clock advances to "2025-10-08T10:00:00Z"
+         And the job runner executes
+         Then a deposit authorization should be placed with the Payment Service Provider
+         And the session's state in the database is now "AUTHORIZED"
+     #+END_SRC
+
+** TODO [#A] Step 3.2: Implement the Job Scheduler & Runner
+   This is the "kitchen timer" for our application. We need a way to schedule tasks to be run in the future and a process to run them when they are due.
+
+   - [ ] Create a database migration for a new `scheduled_jobs` table. It should include columns like `job_id`, `job_type`, `payload`, and `run_at_timestamp`.
+   - [ ] Modify your `BookSessionHandler` from Week 2. When a session is booked, it should now also insert a new row into the `scheduled_jobs` table, with a `run_at_timestamp` of exactly 48 hours before the session's start time.
+   - [ ] Create a simple, standalone "job runner" process. This can be a script that runs on a timer (e.g., every minute).
+   - [ ] The runner's logic will be: query the `scheduled_jobs` table for any jobs where `run_at_timestamp` is in the past, and for each job found, trigger the appropriate handler (e.g., an `AuthorizeDepositHandler`).
+
+** TODO [#B] Step 3.3: Implement the PSP Gateway (The Adapter)
+   This is the piece that talks to Stripe or PayPal. We'll hide the messy details of their specific SDK behind our own clean interface.
+
+   - *Key Concept: The Adapter Pattern*. This is like a *universal travel adapter*. Our application has one simple plug (`gateway.authorize(...)`). The adapter makes it fit into any specific socket (Stripe, PayPal).
+   - [ ] In your Domain/Application layer, define a `PaymentGateway` *interface* with methods like `authorize(amount: Money, idempotencyKey: string)`.
+   - [ ] In your Infrastructure layer, create a `StripeGateway` (or `PayPalGateway`) class that implements this interface.
+   - [ ] Inside the `StripeGateway`, use the actual PSP's SDK to make the network call. This is the *only* place in your entire application that should know you are using Stripe.
+
+** TODO [#C] Step 3.4: Apply Downstream Resiliency Patterns
+   Now we wrap our `StripeGateway` in the hardened shell we learned about this week.
+
+   - *Key Concept: Circuit Breaker*. This works just like an electrical breaker in your house. If it detects too many "faults" (failed API calls), it "trips" and stops any more calls from going through for a while, giving the downstream service time to recover. 
+   - [ ] Wrap your `StripeGateway`'s `authorize` method call in a Circuit Breaker library (e.g., `opossum` for Node.js). Configure it to trip after a certain number of consecutive failures.
+   - [ ] Add intelligent *Retry* logic for when calls fail with a retryable error (like a 503 network error). Use *exponential backoff with jitter* to avoid retry storms.
+   - [ ] Ensure every single network call made by the gateway has a sensible *Timeout*. Never let a call hang forever.
+
+** TODO [#C] Step 3.5: Ensure End-to-End Idempotency
+   This is your ultimate safety net, ensuring that even if your retry logic runs a payment authorization multiple times, the customer is only ever charged once.
+
+   - *Key Concept: Idempotency Key*. This is the "unique barcode on the concert ticket." You send it with your request. The server (the PSP) logs it. If it sees the same barcode again, it knows not to process the request a second time.
+   - [ ] In your `AuthorizeDepositHandler`, create a unique and deterministic idempotency key for the operation. A good key would be a combination of the session ID and the event, e.g., =`${sessionId}:T-48h_auth`=.
+   - [ ] Pass this key through all the layers to your `StripeGateway`.
+   - [ ] The `StripeGateway` must include this key in the header of the API request it sends to Stripe.
+   - [ ] Write a new acceptance test specifically to prove this works: simulate a network failure on the first attempt, and verify that the successful retry results in only *one* charge.

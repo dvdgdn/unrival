@@ -1,0 +1,81 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 10 of 12: The Safety Net
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+Our system is now functionally complete and respects user privacy. This week, our mission is to build the final layer of user trust: the "safety net." This involves two major features. First, we will make our ranking system a "glass engine" by building the *Transparency Page*, showing users exactly how it works and giving them control. Second, we will build an *Appeals Process*, providing a formal channel for users to request a human review when they believe the system has made a mistake.
+
+* Learning Plan 📚
+This week's reading introduces a powerful pattern for handling complex, multi-step business processes that might need to be undone.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 13.2: Sagas* in /Understanding Distributed Systems/.
+     - *Focus On*:
+       - [cite_start]The concept of a *compensating transaction* (e.g., =Ci=) that is used to undo the effects of a previous transaction (=Ti=)[cite: 1916].
+       - [cite_start]How a Saga guarantees *atomicity* (all steps succeed or are undone) but sacrifices *isolation* (partial effects are visible to the outside world before the whole process completes)[cite: 1885, 1918].
+       - [cite_start]The role of an *orchestrator* that manages the state of the long-running transaction[cite: 1926].
+     - /Why this now?/: The "compensating transaction" model from Sagas is the perfect theoretical parallel for an admin-triggered appeal. An appeal adjustment is a human-driven, compensating action that corrects or reverses a previous, automated system action.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+This week we build the original Steps 11 and 12. We'll start with transparency and then build the appeals workflow.
+
+** TODO [#A] Step 10.1: Implement the Transparency Page
+   We will pull back the curtain on our ranking algorithm, showing our work and giving users control.
+
+*** TODO Write the BDD Feature Test
+    - [ ] Create a Gherkin feature file that describes a user changing the ranking weights and seeing a predictable outcome.
+      #+BEGIN_SRC gherkin
+      Feature: User-Controlled and Transparent Coach Ranking
+
+        Scenario: A user can adjust ranking weights and see deterministic results
+          Given two coaches are available:
+            | Coach | Reliability Score | Price per Hour |
+            | Alice | 0.95 (High)       | €100 (High)    |
+            | Bob   | 0.80 (Medium)     | €60 (Low)      |
+          And the default ranking formula is weighted 50% on Reliability and 50% on Price
+
+          When a user views the coach list
+          Then Alice is ranked higher than Bob
+          And Alice's "explainer" shows the 50/50 weights were used in her score calculation
+
+          When the user adjusts the sliders to make Price 80% and Reliability 20%
+          Then the coach list immediately re-sorts
+          And Bob is now ranked higher than Alice
+          And the API "explainer" for Bob now shows the 80/20 weights were used
+      #+END_SRC
+
+*** TODO Build the Feature
+    - *Key Concept: Explainability*. This is about "showing your work." It's like a *nutrition facts label* on food, which doesn't just show the final calorie count but breaks down the components (fat, carbs, protein). Our explainer payload is the nutrition label for the rank score. 
+    - *Key Concept: User Controls*. This is like the *equalizer on a music app*. 🎶 Sliders for "bass" and "treble" let you customize the sound. Our weight sliders let users customize the ranking.
+    - [ ] In your API, modify the coach listing endpoint to accept optional `weight` parameters (e.g., =?weight_ri=0.2&weight_price=0.8=).
+    - [ ] Implement the logic to use these weights in your ranking formula. Ensure you have a stable *tie-breaker* (e.g., sort by coach ID) for cases where scores are identical.
+    - [ ] For each coach returned, generate an `explainer` payload in the JSON response that details exactly how the final score was calculated.
+    - [ ] Build the front-end UI with the sliders that pass these parameters to the API.
+
+** TODO [#B] Step 10.2: Implement the Appeals Process
+   This is the human safety net. We will build an organized workflow for handling user appeals and ensuring every admin action is audited.
+
+*** TODO Write the BDD Feature Test
+    - [ ] Create a Gherkin feature file describing the full lifecycle of an appeal.
+      #+BEGIN_SRC gherkin
+      Feature: Admin Appeals and Adjustments
+
+        Scenario: A client's appeal is reviewed and an audited adjustment is made
+          Given a client was charged a €27.50 cancellation fee for a session
+          When the client files an appeal with the reason "There was a technical issue."
+          Then an "open" appeal case is created and linked to the session
+          When an admin reviews the appeal and applies a "Full Refund" adjustment
+          Then the appeal case is marked as "resolved"
+          And a *new*, immutable ledger entry is created with the reason "Admin goodwill refund"
+          And the original -€27.50 charge entry is *not* deleted or changed
+      #+END_SRC
+
+*** TODO Build the Feature
+    - *Key Concept: Immutable Audit Trail*. This is the most critical concept here. It's like an *accountant's ledger book*. . You never erase a mistake. You make a *new entry* on the next line to correct it. This preserves the full history and ensures trust.
+    - *Key Concept: Workflow/Queue*. This is like the *"in-tray" on an office desk*. 📥 New appeals arrive in the queue, an admin processes them, and they move to a "resolved" state.
+    - [ ] Create a database migration for an `appeals` table. It should link to a `user_id` and `session_id`, and have columns for `status` (`open`, `resolved`), `reason`, etc.
+    - [ ] Build the `POST /appeals` endpoint for users to submit an appeal.
+    - [ ] Build a simple UI view in an "Admin Console" that lists all appeals where `status` is `open`.
+    - [ ] Implement the admin adjustment action (e.g., a "Refund" button). This action must *not* update or delete old ledger entries. Instead, it must create a *new* entry in your append-only `ledger` table that represents the correction.

@@ -1,0 +1,83 @@
+#+TITLE: Promise Protocol v1 — The Guided Tour
+#+SUBTITLE: Week 5 of 12: The Listening Post
+#+AUTHOR: Your Software Pedagogue
+#+TODO: TODO(t) IN-PROGRESS(i) | DONE(d) CANCELED(c)
+#+OPTIONS: toc:2 num:t ^:nil
+
+* This Week's Mission 🎯
+With our core financial transaction flow complete, our system can now reliably act. This week, we will teach it how to listen. Our mission is to build a webhook ingestion endpoint that can securely and reliably receive evidence from an external system like Zoom. This involves three critical challenges: verifying the sender's identity, rejecting duplicate messages, and reliably processing the data we receive. By the end of this week, our system will have a trustworthy channel to gather the facts it needs to make intelligent judgments later on.
+
+* Learning Plan 📚
+This week's reading focuses on the patterns for reliable messaging and understanding the nature of failures in a distributed environment.
+
+** TODO Reading Assignment
+   - [ ] Read *Chapter 13.1: Outbox pattern* in /Understanding Distributed Systems/.
+     - *Focus On*: How a single database transaction can be used to atomically save a business state *and* the event that needs to be published about that change. [cite_start]This is the key to reliably processing the webhook data. [cite: 1898]
+   - [ ] Read *Chapter 7: Failure detection* in /Understanding Distributed Systems/.
+     - [cite_start]*Focus On*: The core idea that it's impossible to perfectly know why a remote system is unresponsive. [cite: 968] This chapter provides the context for why external systems like Zoom might send webhooks multiple times, making our defensive patterns (like deduplication) necessary.
+
+* Building Plan: A Step-by-Step Guide 🛠️
+Our BDD tests will define the three critical behaviors of our webhook endpoint: successfully accepting a valid message, safely ignoring a duplicate, and rejecting a forgery.
+
+** TODO [#A] Step 5.1: Write the BDD Feature Tests
+   We must define how our endpoint behaves under all conditions: the good, the bad, and the repetitive.
+
+   - [ ] Create a new Gherkin feature file for webhook ingestion.
+   - [ ] Write the scenarios for all three critical paths.
+     #+BEGIN_SRC gherkin
+     Feature: Secure and Reliable Evidence Ingestion
+
+       Scenario: A valid webhook is processed exactly once
+         Given the system is configured with Zoom's secret signing key
+         When Zoom sends a valid "participant_joined" event with eventId "evt_123"
+         Then the system verifies the signature is authentic
+         And a new evidence record for event "evt_123" is created
+         And an "EvidenceIngested" event is recorded in the outbox
+
+       Scenario: A duplicate webhook is safely ignored
+         Given an evidence record for event "evt_123" already exists
+         When Zoom sends the same valid "participant_joined" event with eventId "evt_123" a second time
+         Then the system verifies the signature is authentic
+         But no new evidence record is created
+         And no new event is recorded in the outbox
+
+       Scenario: A webhook with a bad signature is rejected
+         When an imposter sends an event with an invalid signature
+         Then the system rejects the request with a 401 Unauthorized error
+         And no evidence is stored and no events are recorded
+     #+END_SRC
+
+** TODO [#B] Step 5.2: Implement the Webhook Endpoint
+   This is the public-facing "door" for Zoom to talk to us.
+
+   - [ ] Create a new controller in your API to handle the webhook route (e.g., =POST /webhooks/zoom=).
+   - [ ] For now, have it accept the raw request body and do nothing else.
+
+** TODO [#B] Step 5.3: Secure the Endpoint with HMAC Verification
+   This is the "guard at the door," checking the ID of everyone who tries to enter. We must ensure we're only talking to the real Zoom.
+
+   - *Key Concept: HMAC Signature*. This is like a *secret handshake*. Both you and Zoom know a secret key. Zoom uses this key to create a unique signature for each message. When a message arrives, you perform the same calculation. [cite_start]If your result matches Zoom's signature, you know the message is authentic and hasn't been tampered with. [cite: 475]
+   - [ ] Add logic to your controller that runs *before any other processing*.
+   - [ ] This logic must read the signature from the request headers (e.g., =X-Zoom-Signature=).
+   - [ ] It must then compute its own HMAC-SHA256 signature of the raw request body using the shared secret.
+   - [ ] If the signatures do not match, immediately stop processing and return a `401 Unauthorized` error.
+
+** TODO [#C] Step 5.4: Implement Deduplication Logic
+   Now that we trust the sender, we need to protect against them repeating themselves. External systems often send events "at-least-once," meaning duplicates are possible and expected.
+
+   - *Key Concept: Deduplication Key*. This is like logging the *tracking number* of a package at a warehouse. Before you accept a new package, you check your logbook. If you've already seen that tracking number, you set the duplicate aside.
+   - [ ] Create a database migration for a simple table to track processed event IDs (e.g., =ingested_event_ids=).
+   - [ ] In your handler, after verifying the HMAC signature, extract the unique ID from the event payload (e.g., =eventId=).
+   - [ ] Before processing, query your new table to see if you have already processed this ID. If you have, stop processing and return a `200 OK` response immediately.
+
+** TODO [#C] Step 5.5: Process and Persist the Evidence Reliably
+   Finally, for a valid, new event, we save the evidence and reliably record that we have done so using the Outbox Pattern.
+
+   - *Key Concept: The Outbox Pattern*. This is like writing a check and recording it in your *checkbook register*. You do both as a single, atomic action. [cite_start]You never mail the check (publish the event) without first having a permanent record of it in your register (the outbox table). [cite: 1898]
+   - [ ] In your Application handler, start a database transaction.
+   - [ ] *Inside the transaction*:
+     - [ ] Log the unique event ID to your =ingested_event_ids= table to prevent duplicates in the future.
+     - [ ] Extract the minimal necessary data from the webhook payload (e.g., =participant_id=, =join_time=). Do not store the whole payload to respect data minimization.
+     - [ ] Save this data to your `evidence` table.
+     - [ ] Create an `EvidenceIngested` domain event and save it to your `outbox` table.
+   - [ ] Commit the transaction. Because all these writes happen atomically, it's impossible to save the evidence without also creating the outbox event, guaranteeing system consistency.

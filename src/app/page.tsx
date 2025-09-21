@@ -20,7 +20,7 @@ export default function Home() {
         <hr className="separator" />
 
         <section id="technique-letter">
-          <h2>1. The &quot;Letter from the Future&quot; Technique</h2>
+          <h2>The &quot;Letter from the Future&quot; Technique</h2>
           <p>A vision statement paints a picture of the world you’re aiming to create. This collaborative exercise is designed to rapidly generate that picture—a vision that engages the heart as well as the head.</p>
           <TechniqueBox title="The Exercise">
             <ol>
@@ -39,7 +39,7 @@ export default function Home() {
         </section>
 
         <section id="technique-analysis">
-          <h2>2. The &quot;Retrograde Analysis&quot; Technique</h2>
+          <h2>The &quot;Retrograde Analysis&quot; Technique</h2>
           <p>A vision is inspiring, but it is not a plan. Retrograde analysis is the technique of working backward from a future success to map the critical path that leads to it. If the letter is the &quot;destination,&quot; this analysis is the &quot;map.&quot; Instead of asking &quot;What do we do next?&quot;, ask, &quot;For our future vision to be true, what must have already happened the year before?&quot;</p>
           
           <VideoPlayer />
@@ -50,7 +50,6 @@ export default function Home() {
         </section>
 
         <section id="the-plan">
-          <h2>Unrival — Rigorous Retrograde Analysis (2027 → early Q3-2025)</h2>
           <RetrogradeAnalysis />
         </section>
 
