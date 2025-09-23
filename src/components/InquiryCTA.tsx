@@ -2,8 +2,8 @@
 
 // repurpose as a Futures CTA
 export default function InquiryCTA() {
-  const letterForm = 'https://docs.google.com/forms/d/e/1FAIpQLSf05hYw4J6bXlnZ2BDVNP7ReGnujzoH_ADLWlUPc8mxLg_--w/viewform?utm_source=unrival_site&utm_medium=hero_btn&utm_campaign=letters_form';
-  const promiseForm = 'https://docs.google.com/forms/d/e/1FAIpQLSfyoP6yVdpITWUnsFnjq2uZZqQM-Va6QozZMGEMEbxo0VKscw/viewform?utm_source=unrival_site&utm_medium=hero_btn&utm_campaign=promises_form';
+  const letterForm = 'https://unrival.link/letter';
+  const promiseForm = 'https://unrival.link/promise';
 
   // (Optional) swap these for pubhtml URLs once published:
   const lettersSheet = 'https://docs.google.com/spreadsheets/d/1d9CiBcqY3FN5RNtrC3HXpwMSpvLqFPCvNfmzYyYWmzY/edit?usp=sharing';
@@ -24,6 +24,15 @@ export default function InquiryCTA() {
         <a href={lettersSheet} target="_blank" rel="noopener noreferrer" className="btn-tertiary">View Letters</a>
         <a href={promisesSheet} target="_blank" rel="noopener noreferrer" className="btn-tertiary">View Promises</a>
       </div>
+<p style={{
+  fontSize: '14px', 
+  fontStyle: 'italic', 
+  marginTop: '12px',
+  textAlign: 'center',
+  color: '#6B7280'
+}}>
+  Q3 2025 cohort forming now • First 50 participants get early access to coaching protocol
+</p>
       <style jsx>{`
         .btn-secondary{display:inline-block;padding:10px 14px;background:#1F6FEB;color:#fff;border-radius:8px;font-weight:700;text-decoration:none}
         .btn-tertiary{display:inline-block;padding:10px 14px;border:1px solid #D0D8E2;color:#0F172A;border-radius:8px;font-weight:700;text-decoration:none;background:#F6F8FB}

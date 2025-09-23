@@ -401,3 +401,34 @@ section {
     h1 { font-size: 2.2rem; }
     h2 { font-size: 1.8rem; }
 }
+.technical-proof-box {
+  font-family: var(--font-lato), sans-serif;
+}
+
+.technical-proof-box h4 {
+  font-family: var(--font-playfair-display), serif;
+  margin-top: 0;
+  color: #1F2937;
+}
+
+.technical-proof-box details summary {
+  transition: color 0.2s ease;
+}
+
+.technical-proof-box details summary:hover {
+  color: #1F6FEB;
+}
+
+.protocol-page {
+  font-family: var(--font-lora), serif;
+  line-height: 1.6;
+}
+
+.protocol-page h1, .protocol-page h2, .protocol-page h3 {
+  font-family: var(--font-playfair-display), serif;
+}
+
+.protocol-page pre {
+  font-family: 'Monaco', 'Menlo', monospace;
+  line-height: 1.4;
+}

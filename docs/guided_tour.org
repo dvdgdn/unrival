@@ -16,7 +16,6 @@ This plan balances these two priorities, ensuring you learn the right concepts j
 
 * Phase 1: The Core Transaction (Weeks 1-4)
 **Goal**: At the end of this month, you will have a working, reliable, end-to-end system that can successfully take a booking, authorize a deposit with a real payment provider, and correctly decide on the final settlement. This is your MVP.
-
 *** Week 1: The Workshop & Primitives
 - *This Week's Goal*: To build a clean, automated "workshop" for your project and forge the fundamental, trustworthy tools you'll use everywhere.
 - *Learning Goals*:
@@ -29,7 +28,18 @@ This plan balances these two priorities, ensuring you learn the right concepts j
 - *Key Concepts Deep Dive*:
   - *Layered Architecture*: A strict set of rules for organizing code to prevent a "spaghetti" mess. [cite_start]The most important rule is that the business logic (Domain) must be pure and never depend on technical details like a database or a web framework[cite: 194, 195].
   - [cite_start]*CI/CD (Continuous Delivery)*: The practice of automating the entire process of releasing code, from code review to production deployment, to make releases safe and efficient[cite: 3385].
-
+**** NLP + Math: Understanding how we group raw sensory data into meaningful categories, or "sets."
+- Core Concepts (Math): Sets, members, set-builder notation, subsets, the empty set, unions, intersections.
+- Core Concepts (NLP): The five senses (VAKOG), sensory acuity, submodalities (the qualities of our internal representations, like brightness of an image or volume of a sound), and chunking (grouping information).
+- Synergy: Submodalities are the fundamental "elements" of our subjective world. We will treat our internal representations (pictures, sounds, feelings) as sets of submodalities. A happy memory, for instance, is a set of specific visual, auditory, and kinesthetic qualities. A limiting belief is another set.  
+- Exercises:
+  - State Elicitation as Set-Building: Elicit a resource state (e.g., "confidence"). Using set-builder notation, define this state as a set of its critical submodalities. For example: C={x∣x is a submodality where image is bright, posture is upright, internal voice is firm}.
+  - Submodality Mapping: Take two states, "motivated" and "unmotivated." List their submodalities as two distinct sets. Identify the intersection (what's the same?) and the set difference (what's different?). The difference identifies the key drivers of the state change.
+**** Supplementary Reading
+- product design: building vs scaling
+- product design: solving the right problem
+- prosocial: Evolution at Multiple Levels and in Multiple Streams    
+- AOS: positive psychology core principles      
 *** Week 2: The First Booking
 - *This Week's Goal*: To bring the system to life by handling its first real user action: booking a session.
 - *Learning Goal*:
@@ -45,7 +55,21 @@ Feature: Book a coaching session
     And the session exists in the database in state "BOOKED"
 #+END_SRC
   - Implement the `POST /sessions` API endpoint, DTO validation, Application service, Domain aggregate (`Session`), and Repository to make the test pass.
-
+**** NLP + Math: Using the logic of set operations to understand how NLP's Meta-Model clarifies distorted language and expands limited models of the world.
+- Core Concepts (Math): Set difference, complements, power sets, set algebra.
+- Core Concepts (NLP): The Meta-Model (deletions, generalizations, distortions), linguistic presuppositions, surface structure vs. deep structure.
+- Synergy: The Meta-Model is a set of linguistic operators for clarifying poorly defined sets. A generalization like "Everyone ignores me" creates a universal set that is easily falsified. A Meta-Model question like, "Who, specifically?" seeks to find the complement set (people who don't ignore you) to challenge the generalization. The power set serves as a metaphor for the explosion of possible interpretations a vague statement can have, highlighting the need for precision.
+- Exercises:
+  - Deconstructing Generalizations: Take a limiting generalization (e.g., "I can't learn math"). Treat "things I can't learn" as a set. Use Meta-Model questions to find members of its complement set ("What can you learn easily?").
+  - Modeling with Venn Diagrams: Model a situation with two conflicting beliefs (e.g., "I must be successful" and "I must have free time"). Use a Venn diagram to map the intersection (where do they overlap?) and the differences. The goal is to find a union that satisfies both.
+**** Supplementary Reading
+- sets
+- induction
+- well-ordering
+- product design: hypothesis testing
+- product design: minimum lovable products
+- Prosocial: Elinor Ostrom and the Commons
+- AOS: Clinical Intuition, Positivity, and Growth Models
 *** Week 3: The Money Moves
 - *This Week's Goal*: To tackle the highest-risk part of the project by integrating with a real payment provider and building the time-based job to authorize a deposit.
 - *Learning Goal*:
@@ -57,6 +81,21 @@ Feature: Book a coaching session
   - Implement a resilient PSP gateway that uses timeouts, retries with jittered backoff, and a circuit breaker.
   - [cite_start]Ensure the authorization call is fully *idempotent* by generating and using an idempotency key[cite: 844].
 
+**** NLP + Math: Formalizing the connection between stimulus and response (anchoring) and the sequence of mental steps (strategies) using the concepts of relations and functions.
+- Core Concepts (Math): Ordered pairs, Cartesian products, relations (reflexive, symmetric, transitive), functions, sequences.
+- Core Concepts (NLP): Anchoring (creating stimulus-response loops), strategies, the T.O.T.E. Model
+ (Test-Operate-Test-Exit).
+- Synergy: An anchor is a function that maps a set of triggers (the domain) to a set of states (the co-domain). A strategy is an ordered tuple or sequence of internal representations. Many limiting beliefs involve flawed transitivity: "If my boss frowns (A), it means he's unhappy with my work (B). If he's unhappy with my work (B), I'm going to get fired (C). Therefore, a frown means I'll be fired (A→C)."
+- Exercises:
+  - The Anchor Function: Identify a powerful resource anchor you have. Formally define it as a function, specifying the domain (e.g., the set of all possible kinesthetic triggers of a certain pressure on your knuckle) and the range (the set of resulting confident states).
+  - Modeling the T.O.T.E.: Model a simple skill (e.g., making coffee). Diagram the T.O.T.E. loop and describe each step as a relation (e.g., "is the water hot enough?", "is the cup full?").
+**** Supplementary Reading
+- relations
+- AOS: Transcendence in Positive Psychology
+- prosocial: Core Design Principles, Version 2.0
+- economics: business models
+- economics: market entry     
+
 *** Week 4: The Judgment
 - *This Week's Goal*: To build the pure "brain" of your financial logic, focusing on correctness and testability.
 - *Learning Goal*: No new reading. Consolidate your knowledge from the first three weeks and apply your understanding of testing from *Chapter 29*.
@@ -64,6 +103,20 @@ Feature: Book a coaching session
   - (Original Step 4) Build the pure `SettlementPolicy` object.
   - Model your business rules (cancellation windows, rebates) as a *decision table* first, then implement them as a pure function.
   - Write comprehensive, table-driven unit tests to cover every financial scenario.
+**** Supplementary Reading
+- relations
+- decision theory and human behavior: Beliefs, Preferences, and Constraints; the meaning of rational action  
+- AOS: ACTs Six Core Processes and Life Map
+- prosocial: evolving behavior
+- economics: moats
+- economics: unit economics    
+**** NLP + Math: Modeling belief systems and value hierarchies using the mathematical structures of order and equivalence.
+- Core Concepts (Math): Equivalence relations and classes, order relations (partial, total), lattices.
+- Core Concepts (NLP): Values elicitation and hierarchy, beliefs as generalizations, complex equivalence ("His tone of voice means he doesn't care").
+- Synergy: A person's values form a partially ordered set. "Security is more important than adventure" is an order relation. A belief often creates an equivalence class, grouping disparate experiences under a single meaning (e.g., {a frown, an email not returned, a sigh} are all members of the equivalence class "evidence of rejection"). NLP interventions often work by breaking these classes or re-ordering the values hierarchy.
+- Exercises:
+  - Mapping a Values Lattice: Elicit your top 5-7 career values. Map the relationships between them as a directed graph. Is it a total or partial order? Identify the "meet" (shared lower value) and "join" (overarching higher value) for any two values, structuring them as a lattice.
+  - Deconstructing an Equivalence Class: Take a limiting belief that involves a complex equivalence. List at least five experiences that are members of that belief's equivalence class. Challenge the equivalence relation itself: Is it truly symmetric and transitive? Find counterexamples.
 
 * Phase 2: The Evidence & Intelligence Layer (Weeks 5-8)
 **Goal**: With the core transaction working, this phase adds the "smarts" by ingesting evidence and building the scoring logic.
@@ -77,7 +130,21 @@ Feature: Book a coaching session
   - (Original Step 6) Build the webhook ingestion endpoint.
   - [cite_start]Implement *HMAC signature verification* to ensure the webhook is authentic[cite: 475].
   - Implement *deduplication* logic to safely ignore duplicate events.
-
+**** NLP + Math: Using automata theory to model habits, compulsions, and other recurring behavioral patterns.
+- Core Concepts (Math): Finite State Machines (FSMs), states, transitions, inputs, outputs. The Game of Life as a model of emergence.
+- Core Concepts (NLP): State management, habit loops, pattern interrupts, emergent patterns from simple rules (e.g., how small shifts in submodalities can lead to large behavioral changes).
+- Synergy: A habit or a phobic response can be perfectly modeled as an FSM. The "input" is a trigger, which causes a "transition" to an unresourceful "state," leading to an "output" behavior. A pattern interrupt is an intervention designed to break a state transition rule, forcing the machine into a different, more resourceful path. The Game of Life illustrates how complex life patterns can emerge from very simple, local rules—a core principle of systemic NLP.
+- Exercises:
+  - Diagramming a Habit: Choose a habit you'd like to change (e.g., checking your phone when bored). Model it as an FSM, clearly defining the states (e.g., "Bored," "Reaching for Phone," "Scrolling," "Guilty"), the inputs (e.g., "lull in conversation"), and the transitions.
+  - Designing a Pattern Interrupt: Based on your FSM diagram, design three different pattern interrupts. One should offer a new input, one should block a transition, and one should insert a new state between two existing ones.
+**** Supplementary Reading
+- AOS: Connecting with the Future Self in ACT
+- automata
+- conditional probability
+- prosocial: Mapping Interests and Building Psychological Flexibility with the ACT Matrix
+- decision theory and human behavior: why are preferences consistent?; time inconsistency
+- economics: customer economics
+- economics: segmentation  
 *** Week 6: The Theoretical Foundation, Part 1
 - *This Week's Goal*: To build the first part of the intelligence layer while acquiring the necessary theoretical foundation for the rest of the phase.
 - *Learning Goals*:
@@ -85,7 +152,24 @@ Feature: Book a coaching session
   - /Why this now?/: These chapters are the direct prerequisites for understanding replication. You must learn them in order to grasp the concepts in the following weeks.
 - *Building Goals*:
   - (Original Step 7) Build the safe, sandboxed *DSL* (Domain-Specific Language) and the Assessment Engine.
+**** NLP + Math: Connecting the formal study of meaning in logic and semantics with the NLP arts of reframing and linguistic transformation.
+- Core Concepts (Math): Extensional semantics (truth-conditions), modal semantics (possible worlds), modalities (necessity, possibility), intensions.
+- Core Concepts (NLP): Reframing (context and content), Sleight of Mouth patterns, "As-If" frame, future pacing.
+- Synergy: The meaning of a belief is its truth-condition in a person's model of the world. Sleight of Mouth is a set of operators for challenging these truth-conditions. A context reframe works by shifting the evaluation of a statement to a different possible world where its meaning (intension) and value change. The "As-If" frame is a direct, practical application of possible world semantics, inviting a person to operate from a world where a goal is already achieved.
+- Exercises:
+  - Sleight of Mouth meets Modal Logic: Take a limiting belief like "I must not fail." Analyze it using modal operators. "Must not" implies necessity (it's not possible to fail, ¬◊F). Use Sleight of Mouth patterns to challenge this modality. "What would happen if you did?" explores a possible world where failure occurs. "Redefine" challenges the extension of the set "Fail."
+  - Future-Pacing as World-Building: Choose a goal. Use the "As-If" frame to step into the possible world where it's achieved. Describe this world: what are its key features? What proposition that is false in the current world is true in that one? This formalizes the process of future-pacing.
 
+**** Supplementary Reading
+- machines
+- automata
+- expected value  
+- prosocial: modules and pathways for the prosocial process
+- decision theory and human behavior: bayesian rationality and subjective priors; the biological basis for expected utility
+- economics: market failures
+- psychology: pricing psychology
+- psychology: motivation
+- AOS: mind-body psychology in context  
 *** Week 7: The Living Scorecard & Replication
 - *This Week's Goal*: To build the dynamic scorecard and complete your understanding of distributed consensus.
 - *Learning Goal*:
@@ -93,7 +177,20 @@ Feature: Book a coaching session
   - /Why this now?/: With the prerequisites from last week complete, you can now fully grasp *State Machine Replication*. [cite_start]You will see that your DSL Assessment Engine must be *deterministic*, just like the operations in this model[cite: 1253].
 - *Building Goals*:
   - (Original Step 8) Build the `Scorecard` aggregate with its methods to apply deltas, decay over time, and handle monthly forgiveness.
-
+**** NLP + Math: Modeling beliefs not as binary true/false statements but as degrees of confidence that are updated in light of new evidence.
+- Core Concepts (Math): Probability, sample spaces, conditional probability, Bayes' Theorem, degrees of belief (subjective probability).
+- Core Concepts (NLP): Belief change cycles, evidence procedures, sorting for evidence, testing.
+- Synergy: A belief can be modeled as a Bayesian prior probability. A person's "evidence procedure" for a belief is how they gather data to update that prior. Many stuck states result from cognitive biases like base-rate neglect (one failure makes me "a failure") or confirmation bias. NLP interventions provide new, compelling data points (E) that force an update of the prior belief (P(H)) to a more useful posterior (P(H∣E)).
+  - Exercises:
+  - Bayesian Belief Audit: Identify a belief you hold. What is your subjective prior probability (your degree of belief from 0 to 1)? What is your evidence procedure? For the next week, actively seek both confirming and disconfirming evidence. At the end of the week, consciously update your prior to a posterior probability.
+  - Modeling Confirmation Bias: Think of a time you were wrongly convinced of something. Analyze the situation using Bayes' Theorem. How did you overweight your prior? What new evidence (E) with a high likelihood ratio (P(E∣H)/P(E∣¬H)) finally forced you to update your belief?
+**** Supplementary Reading
+- prosocial: cdp 1: shared identity and awareness
+- decision theory and human behavior: the allais and ellsberg paradoxes; risk and the shape of the utility function
+- psychology: getting the click
+- psychology: stickiness
+- user experience: cognition
+- AOS: cultivating body awareness and somatic systems  
 *** Week 8: The Full Picture
 - *This Week's Goal*: To complete the scoring logic by composing multiple inputs into a single, confidence-aware score.
 - *Learning Goal*:
@@ -103,7 +200,21 @@ Feature: Book a coaching session
   - (Original Step 9) Add the final standards (e.g., "Recap ≤24h").
   - Implement the logic to compose the Overall Awesome Score (OAS) using weighted sums.
   - Implement the display rules to hide the OAS until the minimum evidence threshold is met.
-
+**** NLP + Math: Using information theory to understand mental clarity, confusion, and the efficiency of communication.
+- Core Concepts (Math): Entropy, bits, efficient coding, compression, mutual information.
+- Core Concepts (NLP): State management, rapport, sensory calibration, chunking information.
+- Synergy: A state of confusion or uncertainty has high entropy; a state of clarity and focus has low entropy. The goal of many NLP techniques is to reduce entropy. Rapport can be modeled as maximizing mutual information between two systems (people)—your state provides reliable information about theirs, and vice versa. Chunking information into acronyms or metaphors is a form of lossless compression for thought.
+- Exercises:
+  - Entropy Reduction: Record yourself explaining a complex topic you understand well for two minutes. Now record yourself explaining a topic you find confusing. Transcribe both. Analyze the language. Where is the entropy (ambiguity, vagueness, repetition) higher? How could you "re-code" the confusing explanation to be more efficient?
+  - Calibrating Mutual Information: In a conversation, practice calibrating to someone's non-verbal cues. Form a hypothesis about their state based on a cue (e.g., "they are leaning back, which means they are skeptical"). Test your hypothesis with a question. Model this as a process of increasing the mutual information between their state and your model of it.
+**** Supplementary Reading
+- AOS: anchoring and energetic development
+- schnelles denken, langsames denken: prospect theorie
+- decision theory and human behavior: prospect theory; heuristics and biases    
+- prosocial: cdp 2: Equitable Distribution of Contributions and Benefits
+- user experience: UX principles
+- user experience: usability
+- user experience: customer vs business
 * Phase 3: The Trust & Hardening Layer (Weeks 9-12)
 **Goal**: To build the final user-trust features and make the entire system ready for a public, production launch.
 
@@ -115,7 +226,22 @@ Feature: Book a coaching session
 - *Building Goals*:
   - (Original Step 10) Build the consent gates to block sensitive evidence without explicit opt-in.
   - Build the DSAR export and data retention/purge jobs.
+**** NLP + Math: Applying the models of game and decision theory to understand and improve interpersonal dynamics, negotiation, and cooperation.
+- Core Concepts (Math): Decision Theory (expected utility), Game Theory, Nash equilibria, the Prisoner's Dilemma, iterated games, common knowledge.
+- Core Concepts (NLP): Win-win framing, perceptual positions (1st, 2nd, 3rd), negotiation frames, ecology checks.
+- Synergy: Many conflicts can be modeled as a Prisoner's Dilemma, where individually rational choices lead to a poor collective outcome. NLP's goal is to change the game. Taking a second position (seeing from their eyes) helps understand their utility function. Establishing deep rapport builds common knowledge of cooperative intent. Reframing a single interaction as one move in an iterated game changes the payoffs by introducing reputation and trust.
+- Exercises:
+  - Mapping the Game: Describe a recent disagreement or negotiation. Map the players, their strategies, and their payoffs in a simple 2x2 game matrix. Was it a zero-sum game or a Prisoner's Dilemma? What was the equilibrium outcome?
+  - Designing a Better Game: Using your map, design three NLP interventions to change the game. 1) A reframe to create a shared outcome (alters payoffs). 2) Taking the second position to better understand their utility. 3) A future-pace to shift it from a single-shot to an iterated game.
 
+**** Supplementary Reading
+- prosocial: cdp 3: fair and inclusive decision making
+- data science: distributions of data
+- data science: experiments
+- AOS: subtle movement, sound, and silence in therapy
+- game theory basic concepts: the extensive form; the normal form; mixed strategies; nash equilibrium
+
+  
 *** Week 10: The Safety Net
 - *This Week's Goal*: To build the systems for transparency and human-in-the-loop correction.
 - *Learning Goal*:
@@ -123,7 +249,20 @@ Feature: Book a coaching session
   - [cite_start]/Why this now?/: The "compensating transaction" model from Sagas is the perfect theoretical parallel for an admin appeal that corrects a previous automated system action[cite: 1917].
 - *Building Goals*:
   - (Original Steps 11 & 12) Build the Transparency Page with its "explainer" payloads and user-controlled weights. Build the Appeals Console and the workflow for admin adjustments.
-
+**** NLP + Math: Using concepts of infinity, limits, and paradoxes to understand and intervene in non-productive, looping thought patterns (rumination, analysis-paralysis).
+- Core Concepts (Math): Recursively defined series, limits, Zeno's paradoxes, supertasks.
+- Core Concepts (NLP): Breaking patterns for looping thoughts, future pacing as convergence, setting well-formed outcomes.
+- Synergy: A state of "analysis-paralysis" is like one of Zeno's paradoxes: to take the first step, you must first take half of that step, but first half of that... you never start. The task seems to have an infinite number of prerequisites. An NLP intervention sets a clear outcome and a "first step" to break the recursion. Future pacing models the goal state as the limit of a series of actions—you don't need to live out every step to know the direction of convergence.
+- Exercises:
+  - Modeling a Zeno Loop: Identify a task you procrastinate on. What is the infinite series of "preparations" you feel you must do before starting? ("I can't apply for the job until my resume is perfect, but I can't perfect it until I research more...").
+  - Designing a "Limit" Intervention: For your Zeno Loop, design an intervention. Define a "good enough" state (the limit). What is the smallest possible first step (the first term in the series) you can take in the next 5 minutes to move toward it?
+**** Supplementary Reading
+- prosocial: cdp 4: monitoring agreed upon behaviors
+- data science: metrics
+- data science: metric models
+- data science: storytelling with data    
+- AOS: ancient wisdom traditions and creative healing stories
+- game theory basic concepts: the fundamental theorem of game theory; solving for mixed strategy nash equilibria; throwing fingers; the battle of the sexes; the hawk-dove game  
 *** Week 11: Production Readiness
 - *This Week's Goal*: To build the hardened, scalable, and reliable cloud infrastructure for the application.
 - *Learning Goal*:
@@ -134,7 +273,18 @@ Feature: Book a coaching session
   - Configure Kubernetes for deployment and scaling.
   - Set up your core observability stack: metrics, logs, traces, and dashboards.
   - Implement zero-downtime blue/green deployments.
-
+**** NLP + Math: Using Cantor's proofs about different sizes of infinity as a metaphor for generating limitless new perspectives and breaking cognitive fixedness.
+- Core Concepts (Math): Comparing sizes of sets (cardinality), Cantor's diagonal argument, power sets.
+- Core Concepts (NLP): Logical levels of thinking (Dilts), meta-position, creative reframing.
+- Synergy: A set of beliefs or frames about a problem is like a list of real numbers. Cantor's diagonal argument provides a rigorous method for creating a new number that is guaranteed not to be on the list. This is a perfect formal model for creativity: for any given set of perspectives on a problem, you can always generate a new one. The power set (the set of all subsets) shows how even a few core distinctions can generate an exponential number of possible states or frames.
+- Exercises:
+  - The Diagonal Reframe: Take a difficult problem. List 5-10 assumptions or frames people (including you) have about it. Now, create a new frame by systematically negating a "diagonal" feature of each existing frame. (e.g., If Frame 1 is about solving, Frame 2 is about speed, Frame 3 is about cost... your new frame is about not solving, not speed, not cost... what could that be? Perhaps it's about "learning from the problem"?)
+  - Exploring the Power Set: Take three key values (e.g., Freedom, Security, Connection). The power set has 2 3 = 8 elements. List all 8 subsets. How does considering just {Freedom}, vs. {Freedom, Security}, vs. {Freedom, Security, Connection} change how you approach a decision?
+**** Supplementary Reading
+- prosocial: cdp 4: Graduated Responding to Helpful and Unhelpful Behavior
+- product management: marketing
+- AOS: attachment, interpersonal neurobiology and affect regulation
+- game theory basic concepts: the prisoner's dilemma; Alice, Bob, and the Choreographer; An Efficiency-Enhancing Choreographer; The Correlated Equilibrium Solution Concept   
 *** Week 12: Drills, Polish & Buffer
 - *This Week's Goal*: To validate your hardened system, finalize documentation, and absorb any project delays.
 - *Learning Goal*:
@@ -144,6 +294,19 @@ Feature: Book a coaching session
   - Run disaster drills: intentionally trigger failures (e.g., block access to the PSP, shut down database replicas) and follow your runbooks to see if the system behaves as expected.
   - Finalize all documentation.
   - Address any bugs or "polish" items discovered during hardening.
+**** NLP + Math: Using Gödel's Incompleteness Theorem as the ultimate metaphor for NLP's core presupposition: "The Map is Not the Territory."
+- Core Concepts (Math): Soundness, completeness, Gödel's Incompleteness Theorems (as a philosophical concept).
+- Core Concepts (NLP): The Map is Not the Territory, Logical Levels, third position (observer), the limits of any one model.
+- Synergy: Gödel's theorem shows that any formal system (a "map") powerful enough to do arithmetic will contain true statements it cannot prove from its own axioms (it is incomplete). This is the ultimate formalization of "The Map is Not the Territory." It teaches us that no single model of ourselves or the world can ever be complete. The goal is not to find the one true map, but to build more useful and elegant maps, and to be able to shift between them fluidly.
+- Final Project/Exercise:
+  - Model and Meta-Model: Choose a complex skill or belief system you've wanted to understand (e.g., "how to be charismatic," "the mindset of an entrepreneur").
+  - Part A (The NLP Model): Create a detailed NLP model of this skill, using strategies, T.O.T.E.s, values, and Meta-Programs.
+  - Part B (The Mathematical Meta-Critique): Write a companion analysis of your own model. Use the concepts from this course to critique it. What are its core axioms (beliefs)? How does it use sets and relations? Where are its potential paradoxes or Gödelian blind spots? What is its "logic"? This final project demonstrates a true integration of both disciplines.
+**** Supplementary Reading
+- product management: law & policy
+- AOS: mindfulness in mind-body psychology
+- prosocial: cdp 6: Fast and Fair Conflict Resolution
+- game theory basic concepts: Self- and Other-Regarding Preferences; Methodological Issues in Behavioral Game Theory; An Anonymous Market Exchange; The Rationality of Altruistic Giving
 
 * Appendix: The Five Big Ideas
 A quick reference for the core, cross-cutting principles you will master during this project.
