@@ -1,0 +1,21 @@
+* CI/CD
+** Q: What happens when releasing a change requires manual intervention?
+** A: It won't/can't happen often as there will be backup
+** Q: What is canary testing?
+** A: releasing to a small number of production servers first
+** Q: How can a backwards incompatible change be safely introduced?
+** A: Preparing it in multiple steps, each backwards compatible.
+- 1. prepare change: consumer modified to accept both new and old change
+- 2. activate change: producer modified to produce new change
+- 3. cleanup change: consumer modified to accept new change only
+
+* Building vs Scaling
+** Q: Agency Protocol has an unfulfilled demand - integrity - but about an untapped supply?
+** Q: Abductio has an unfulfilled demand - validation - but about an untapped supply?
+** Q: What 10x advantages does AP or abductio have over alternatives?
+** Q: Which [[id:19817FE8-025F-4C35-BF6F-DB8E4D29E82F][hard-to-copy advantages]] advantages does abductio have?
+** Q: Which [[id:19817FE8-025F-4C35-BF6F-DB8E4D29E82F][hard-to-copy advantages]] advantages does agency protocol have?
+* Tranceformations
+** Q: How do you use transition words to lead from rapport to state?
+** A: Use /as/ or /when/ or other words implying time-relationships to that doesn't really exist, e.g. as you sit there it's possible for you to realize that I'm about to tell you something (tone of voice implying the meaing)
+** Practice: notice tone of voice in a statement like the above implying meaning and changing state

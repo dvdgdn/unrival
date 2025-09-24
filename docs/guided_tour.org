@@ -14,15 +14,19 @@ The plan is designed around two core principles:
 
 This plan balances these two priorities, ensuring you learn the right concepts just in time to build the next feature with confidence and depth. Each week contains clear *Learning Goals* and *Building Goals*.
 
+* Topics
+- math: foundational structures, probability, information, games
+
 * Phase 1: The Core Transaction (Weeks 1-4)
-**Goal**: At the end of this month, you will have a working, reliable, end-to-end system that can successfully take a booking, authorize a deposit with a real payment provider, and correctly decide on the final settlement. This is your MVP.
+**Goal**: At the end of this month, you will have a working, reliable, end-to-end system that can successfully take a booking, authorize a deposit with a real payment provider,
+and correctly decide on the final settlement. This is your MVP.
 *** Week 1: The Workshop & Primitives
 - *This Week's Goal*: To build a clean, automated "workshop" for your project and forge the fundamental, trustworthy tools you'll use everywhere.
 - *Learning Goals*:
   - Read *Part I: Communication (Ch 2-5)* and *Part V: Maintainability (Ch 29-33)* from /Understanding Distributed Systems/.
   - /Why this now?/: This front-loads the absolute essentials. [cite_start]Part I covers the "physics" of how services talk, and Part V covers the operational lifecycle (testing, deploying, monitoring)[cite: 11, 23]. Reading these first gives you the complete context for building a professional-grade system from day one.
 - *Building Goals*:
-  - (Original Steps 0 & 1) Set up your monorepo, a CI pipeline that runs on every commit, and scripts for deploying ephemeral environments per pull request.
+  - Set up your monorepo, a CI pipeline that runs on every commit, and scripts for deploying ephemeral environments per pull request.
   - Build the core, pure primitives in your domain package: `Money` (using integer cents), `Percentage`, and a controllable `Clock`.
   - Establish your "layered architecture" with linting rules to enforce boundaries.
 - *Key Concepts Deep Dive*:
@@ -35,11 +39,43 @@ This plan balances these two priorities, ensuring you learn the right concepts j
 - Exercises:
   - State Elicitation as Set-Building: Elicit a resource state (e.g., "confidence"). Using set-builder notation, define this state as a set of its critical submodalities. For example: C={x∣x is a submodality where image is bright, posture is upright, internal voice is firm}.
   - Submodality Mapping: Take two states, "motivated" and "unmotivated." List their submodalities as two distinct sets. Identify the intersection (what's the same?) and the set difference (what's different?). The difference identifies the key drivers of the state change.
+***** IN-PROGRESS Unit 4.2: Five Senses?
+:PROPERTIES:
+:ID:       964A6F23-4B42-4801-827E-A958F529F7B4
+:END:
+***** TODO Unit 4.3: The Eye and the Brain
+:PROPERTIES:
+:ID:       9390B703-8D0B-4588-B12C-E9E7EC83BDB2
+:END:
+***** TODO Unit 4.4: Eyes and Eye Movement
+:PROPERTIES:
+:ID:       4ABF6197-2570-4444-B9AA-28CB0FB1CC60
+:END:
+***** TODO Unit 4.5: Cognitive Neuroscience of Vision
+:PROPERTIES:
+:ID:       15C63918-B29A-41BF-B452-92ABFC00C7FF
+:END:
+***** TODO Unit 4.6: The Ecological Approach to Vision
+:PROPERTIES:
+:ID:       BA3443DC-791D-4F2A-9CB0-D3BAAD8C262C
+:END:
+***** TODO Unit 4.7: Competing Approaches to Vision
+:PROPERTIES:
+:ID:       1AE1C86E-7FBC-45BB-9F72-2E26FB52A879
+:END:
+***** TODO Unit 4.8: Optical Illusions
+:PROPERTIES:
+:ID:       A837982C-DD30-4E7E-9AD7-A7ADC7052C38
+:END:
+***** Instant Rapport: Languages of Rapport
+***** Instant Rapport: Eye Accessing Cues
 **** Supplementary Reading
 - product design: building vs scaling
 - product design: solving the right problem
 - prosocial: Evolution at Multiple Levels and in Multiple Streams    
 - AOS: positive psychology core principles      
+- fat chance: the multiplication principle
+- Creative Memorization
 *** Week 2: The First Booking
 - *This Week's Goal*: To bring the system to life by handling its first real user action: booking a session.
 - *Learning Goal*:
@@ -62,13 +98,29 @@ Feature: Book a coaching session
 - Exercises:
   - Deconstructing Generalizations: Take a limiting generalization (e.g., "I can't learn math"). Treat "things I can't learn" as a set. Use Meta-Model questions to find members of its complement set ("What can you learn easily?").
   - Modeling with Venn Diagrams: Model a situation with two conflicting beliefs (e.g., "I must be successful" and "I must have free time"). Use a Venn diagram to map the intersection (where do they overlap?) and the differences. The goal is to find a union that satisfies both.
+***** Instant Rapport: The Mirroring/Matching Process
+***** Instant Rapport: The Strategies
+***** TODO Unit 5.1: Types of Reasoning
+:PROPERTIES:
+:ID:       1AC4C581-DB90-43ED-B685-ECC532073653
+:END:
+***** TODO Unit 5.2: Inductive Reasoning
+:PROPERTIES:
+:ID:       32A7B075-F376-41F5-A869-F4D5A66BBADE
+:END:
+***** TODO Unit 5.3: Deductive Reasoning
+:PROPERTIES:
+:ID:       99403020-2068-4D31-8096-F859818F4C3B
+:END:
 **** Supplementary Reading
+- fat chance: the subtraction principle
 - sets
 - induction
 - well-ordering
 - product design: hypothesis testing
 - product design: minimum lovable products
 - Prosocial: Elinor Ostrom and the Commons
+- memory: reference stories
 - AOS: Clinical Intuition, Positivity, and Growth Models
 *** Week 3: The Money Moves
 - *This Week's Goal*: To tackle the highest-risk part of the project by integrating with a real payment provider and building the time-based job to authorize a deposit.
@@ -89,13 +141,23 @@ Feature: Book a coaching session
 - Exercises:
   - The Anchor Function: Identify a powerful resource anchor you have. Formally define it as a function, specifying the domain (e.g., the set of all possible kinesthetic triggers of a certain pressure on your knuckle) and the range (the set of resulting confident states).
   - Modeling the T.O.T.E.: Model a simple skill (e.g., making coffee). Diagram the T.O.T.E. loop and describe each step as a relation (e.g., "is the water hot enough?", "is the cup full?").
+***** Instant Rapport: Anchoring
+***** TODO Unit 5.4: The Wason 2-4-6-Task
+:PROPERTIES:
+:ID:       E869BF74-1EFE-4910-BD60-257CDEFBEB31
+:END:
+***** TODO Unit 5.5: The Wason Selection Task
+:PROPERTIES:
+:ID:       C4278C63-C53F-4CEB-9034-8AD2AE52DA71
+:END:
+
 **** Supplementary Reading
 - relations
 - AOS: Transcendence in Positive Psychology
 - prosocial: Core Design Principles, Version 2.0
 - economics: business models
 - economics: market entry     
-
+- memory: the chain method
 *** Week 4: The Judgment
 - *This Week's Goal*: To build the pure "brain" of your financial logic, focusing on correctness and testability.
 - *Learning Goal*: No new reading. Consolidate your knowledge from the first three weeks and apply your understanding of testing from *Chapter 29*.
@@ -110,6 +172,8 @@ Feature: Book a coaching session
 - prosocial: evolving behavior
 - economics: moats
 - economics: unit economics    
+- fat chance: collections; games of chance
+- memory: memory networks
 **** NLP + Math: Modeling belief systems and value hierarchies using the mathematical structures of order and equivalence.
 - Core Concepts (Math): Equivalence relations and classes, order relations (partial, total), lattices.
 - Core Concepts (NLP): Values elicitation and hierarchy, beliefs as generalizations, complex equivalence ("His tone of voice means he doesn't care").
@@ -117,7 +181,25 @@ Feature: Book a coaching session
 - Exercises:
   - Mapping a Values Lattice: Elicit your top 5-7 career values. Map the relationships between them as a directed graph. Is it a total or partial order? Identify the "meet" (shared lower value) and "join" (overarching higher value) for any two values, structuring them as a lattice.
   - Deconstructing an Equivalence Class: Take a limiting belief that involves a complex equivalence. List at least five experiences that are members of that belief's equivalence class. Challenge the equivalence relation itself: Is it truly symmetric and transitive? Find counterexamples.
+***** Instant Rapport: Sexual Rapport
+***** TODO Unit 6.1: Representation and Maps
+:PROPERTIES:
+:ID:       462A974D-003E-4342-8197-40B00F5786E4
+:END:
+***** TODO Unit 6.2: Cortical Maps
+:PROPERTIES:
+:ID:       271313CF-29E4-4E3B-B7E7-93C9F48D1AD7
+:END:
+***** TODO Unit 6.3: Representation, Symbols, Images
+:PROPERTIES:
+:ID:       7A4812D5-C319-4CCF-A55F-1CB82F5D617B
+:END:
+***** TODO Unit 6.4: Representation Challenges
+:PROPERTIES:
+:ID:       2D095CB4-2CD3-4A6E-823A-4F94D6AA73E6
+:END:
 
+:PROPERTIES:
 * Phase 2: The Evidence & Intelligence Layer (Weeks 5-8)
 **Goal**: With the core transaction working, this phase adds the "smarts" by ingesting evidence and building the scoring logic.
 
@@ -137,14 +219,25 @@ Feature: Book a coaching session
 - Exercises:
   - Diagramming a Habit: Choose a habit you'd like to change (e.g., checking your phone when bored). Model it as an FSM, clearly defining the states (e.g., "Bored," "Reaching for Phone," "Scrolling," "Guilty"), the inputs (e.g., "lull in conversation"), and the transitions.
   - Designing a Pattern Interrupt: Based on your FSM diagram, design three different pattern interrupts. One should offer a new input, one should block a transition, and one should insert a new state between two existing ones.
+***** TODO Unit 6.5: Categories and Knowledge Representation
+:PROPERTIES:
+:ID:       7CA7454D-7283-4565-B902-EF14826D4AF9
+:END:
+***** TODO Unit 6.6: Artificial "Intelligence"
+:PROPERTIES:
+:ID:       9EB9E68B-1B4E-4DFB-A4E0-1935FDC50CA4
+:END:
+***** TODO Unit 6.7: Beyond Representations
 **** Supplementary Reading
 - AOS: Connecting with the Future Self in ACT
 - automata
-- conditional probability
+- memory: the number system
+- fat chance: pascal's triangle and the binomial theorem  
 - prosocial: Mapping Interests and Building Psychological Flexibility with the ACT Matrix
 - decision theory and human behavior: why are preferences consistent?; time inconsistency
 - economics: customer economics
 - economics: segmentation  
+- memory: the number system
 *** Week 6: The Theoretical Foundation, Part 1
 - *This Week's Goal*: To build the first part of the intelligence layer while acquiring the necessary theoretical foundation for the rest of the phase.
 - *Learning Goals*:
@@ -159,7 +252,22 @@ Feature: Book a coaching session
 - Exercises:
   - Sleight of Mouth meets Modal Logic: Take a limiting belief like "I must not fail." Analyze it using modal operators. "Must not" implies necessity (it's not possible to fail, ¬◊F). Use Sleight of Mouth patterns to challenge this modality. "What would happen if you did?" explores a possible world where failure occurs. "Redefine" challenges the extension of the set "Fail."
   - Future-Pacing as World-Building: Choose a goal. Use the "As-If" frame to step into the possible world where it's achieved. Describe this world: what are its key features? What proposition that is false in the current world is true in that one? This formalizes the process of future-pacing.
-
+***** TODO Unit 7.1: Brains and Nervous Systems
+:PROPERTIES:
+:ID:       6FB91175-119F-4906-AD13-A0F6C2D38048
+:END:
+***** TODO Unit 7.2: What is a Nervous System?
+:PROPERTIES:
+:ID:       197DFACA-5CF8-4777-9DEB-3A1C8901EBAB
+:END:
+***** TODO Unit 7.3: The Phrenological Danger
+:PROPERTIES:
+:ID:       001ECD66-EF1A-4CBD-8FB7-A667312A98BA
+:END:
+***** TODO Unit 7.4: Low Tech Cognitive Neuroscience
+:PROPERTIES:
+:ID:       E55114C7-67D6-4C7A-A495-3249C9DE8E74
+:END:
 **** Supplementary Reading
 - machines
 - automata
@@ -169,7 +277,9 @@ Feature: Book a coaching session
 - economics: market failures
 - psychology: pricing psychology
 - psychology: motivation
-- AOS: mind-body psychology in context  
+- AOS: mind-body psychology in context
+- memory: mind mapping
+- memory: reading strategies  
 *** Week 7: The Living Scorecard & Replication
 - *This Week's Goal*: To build the dynamic scorecard and complete your understanding of distributed consensus.
 - *Learning Goal*:
@@ -179,11 +289,24 @@ Feature: Book a coaching session
   - (Original Step 8) Build the `Scorecard` aggregate with its methods to apply deltas, decay over time, and handle monthly forgiveness.
 **** NLP + Math: Modeling beliefs not as binary true/false statements but as degrees of confidence that are updated in light of new evidence.
 - Core Concepts (Math): Probability, sample spaces, conditional probability, Bayes' Theorem, degrees of belief (subjective probability).
+  
 - Core Concepts (NLP): Belief change cycles, evidence procedures, sorting for evidence, testing.
 - Synergy: A belief can be modeled as a Bayesian prior probability. A person's "evidence procedure" for a belief is how they gather data to update that prior. Many stuck states result from cognitive biases like base-rate neglect (one failure makes me "a failure") or confirmation bias. NLP interventions provide new, compelling data points (E) that force an update of the prior belief (P(H)) to a more useful posterior (P(H∣E)).
   - Exercises:
   - Bayesian Belief Audit: Identify a belief you hold. What is your subjective prior probability (your degree of belief from 0 to 1)? What is your evidence procedure? For the next week, actively seek both confirming and disconfirming evidence. At the end of the week, consciously update your prior to a posterior probability.
   - Modeling Confirmation Bias: Think of a time you were wrongly convinced of something. Analyze the situation using Bayes' Theorem. How did you overweight your prior? What new evidence (E) with a high likelihood ratio (P(E∣H)/P(E∣¬H)) finally forced you to update your belief?
+***** TODO Unit 7.5: Brain Imaging 1: EEG
+:PROPERTIES:
+:ID:       44874CA7-5066-47F0-923A-759976E8BC23
+:END:
+***** TODO Unit 7.6: Brain Imaging 2: fMRI
+:PROPERTIES:
+:ID:       5E98199B-D742-4F20-B129-BED279DA259D
+:END:
+***** TODO Unit 7.7: Brains, Technology and Bullshit
+:PROPERTIES:
+:ID:       16957B0C-64CF-4C00-A930-36AA0A0AB377
+:END:
 **** Supplementary Reading
 - prosocial: cdp 1: shared identity and awareness
 - decision theory and human behavior: the allais and ellsberg paradoxes; risk and the shape of the utility function
@@ -191,6 +314,8 @@ Feature: Book a coaching session
 - psychology: stickiness
 - user experience: cognition
 - AOS: cultivating body awareness and somatic systems  
+- fat chance: conditional probability
+- memory: 
 *** Week 8: The Full Picture
 - *This Week's Goal*: To complete the scoring logic by composing multiple inputs into a single, confidence-aware score.
 - *Learning Goal*:
@@ -207,6 +332,18 @@ Feature: Book a coaching session
 - Exercises:
   - Entropy Reduction: Record yourself explaining a complex topic you understand well for two minutes. Now record yourself explaining a topic you find confusing. Transcribe both. Analyze the language. Where is the entropy (ambiguity, vagueness, repetition) higher? How could you "re-code" the confusing explanation to be more efficient?
   - Calibrating Mutual Information: In a conversation, practice calibrating to someone's non-verbal cues. Form a hypothesis about their state based on a cue (e.g., "they are leaning back, which means they are skeptical"). Test your hypothesis with a question. Model this as a process of increasing the mutual information between their state and your model of it.
+***** TODO Unit 8.1: Beyond the Cult of the Individual
+:PROPERTIES:
+:ID:       739DB21C-F185-4A7B-A19E-6E2089C2F2E8
+:END:
+***** TODO Unit 8.3: Harry Harlow
+:PROPERTIES:
+:ID:       1B7657FA-6296-47B2-BFFC-41F05997F015
+:END:
+***** TODO Unit 8.5: New Approaches Needed!
+:PROPERTIES:
+:ID:       49186297-188A-4FB9-B191-27187F0E00D5
+:END:
 **** Supplementary Reading
 - AOS: anchoring and energetic development
 - schnelles denken, langsames denken: prospect theorie
@@ -215,6 +352,8 @@ Feature: Book a coaching session
 - user experience: UX principles
 - user experience: usability
 - user experience: customer vs business
+- fat chance: unfair coins and loaded dice
+- fat chance: games and their payoffs  
 * Phase 3: The Trust & Hardening Layer (Weeks 9-12)
 **Goal**: To build the final user-trust features and make the entire system ready for a public, production launch.
 
@@ -233,15 +372,30 @@ Feature: Book a coaching session
 - Exercises:
   - Mapping the Game: Describe a recent disagreement or negotiation. Map the players, their strategies, and their payoffs in a simple 2x2 game matrix. Was it a zero-sum game or a Prisoner's Dilemma? What was the equilibrium outcome?
   - Designing a Better Game: Using your map, design three NLP interventions to change the game. 1) A reframe to create a shared outcome (alters payoffs). 2) Taking the second position to better understand their utility. 3) A future-pace to shift it from a single-shot to an iterated game.
-
-**** Supplementary Reading
+***** TODO Unit 9.1: Introducing Movement
+:PROPERTIES:
+:ID:       22267799-0ABB-4928-A520-9484419F0DD9
+:END:
+***** TODO Unit 9.2: Control and Puppets
+:PROPERTIES:
+:ID:       FF584B20-6637-4781-A474-ED1BD0C18FC5
+:END:
+***** TODO Unit 9.3: Coordination and Entrainment
+:PROPERTIES:
+:ID:       D7A9221B-3D33-48B3-9AD5-99CA8265C070
+:END:
+***** TODO Unit 9.4: Coordination and Gait
+:PROPERTIES:
+:ID:       3E8C5AE9-FEC1-407D-B223-2B761A42D025
+:END:
+****** Supplementary Reading
+- fat chance: the normal distribution
 - prosocial: cdp 3: fair and inclusive decision making
 - data science: distributions of data
 - data science: experiments
 - AOS: subtle movement, sound, and silence in therapy
 - game theory basic concepts: the extensive form; the normal form; mixed strategies; nash equilibrium
 
-  
 *** Week 10: The Safety Net
 - *This Week's Goal*: To build the systems for transparency and human-in-the-loop correction.
 - *Learning Goal*:
@@ -256,8 +410,21 @@ Feature: Book a coaching session
 - Exercises:
   - Modeling a Zeno Loop: Identify a task you procrastinate on. What is the infinite series of "preparations" you feel you must do before starting? ("I can't apply for the job until my resume is perfect, but I can't perfect it until I research more...").
   - Designing a "Limit" Intervention: For your Zeno Loop, design an intervention. Define a "good enough" state (the limit). What is the smallest possible first step (the first term in the series) you can take in the next 5 minutes to move toward it?
+***** TODO [[https://www.dimoninstitute.org/_files/ugd/c97189_4fff7093d3264c31aed7fa26c0816a5f.pdf][CONTROL OF GOAL-DIRECTED AND STIMULUS-DRIVEN ATTENTION IN THE BRAIN]]
+:PROPERTIES:
+:ID:       DCB7E088-1A54-47B0-B372-736216882ED3
+:END:
+***** TODO Unit 9.5: Robotics
+:PROPERTIES:
+:ID:       0EAD1C07-B8E9-4076-BC81-A339FEC060E1
+:END:
+***** TODO Unit 9.6: Movement and the Nervous System
+:PROPERTIES:
+:ID:       54DE950F-28B2-420A-BD29-12C18148AB05
+:END:
 **** Supplementary Reading
 - prosocial: cdp 4: monitoring agreed upon behaviors
+- fat chance: don't try this at home  
 - data science: metrics
 - data science: metric models
 - data science: storytelling with data    
@@ -280,6 +447,18 @@ Feature: Book a coaching session
 - Exercises:
   - The Diagonal Reframe: Take a difficult problem. List 5-10 assumptions or frames people (including you) have about it. Now, create a new frame by systematically negating a "diagonal" feature of each existing frame. (e.g., If Frame 1 is about solving, Frame 2 is about speed, Frame 3 is about cost... your new frame is about not solving, not speed, not cost... what could that be? Perhaps it's about "learning from the problem"?)
   - Exploring the Power Set: Take three key values (e.g., Freedom, Security, Connection). The power set has 2 3 = 8 elements. List all 8 subsets. How does considering just {Freedom}, vs. {Freedom, Security}, vs. {Freedom, Security, Connection} change how you approach a decision?
+***** TODO Unit 10.1: Introducing Consciousness
+:PROPERTIES:
+:ID:       A0EB9D80-F2F8-47D2-A6FF-70B3460C022C
+:END:
+***** TODO Unit 10.2: Access Consciousness
+:PROPERTIES:
+:ID:       7FAA0DD3-1A7E-40AA-8EF3-6E549A821C9D
+:END:
+***** TODO Unit 10.3: Subliminal Advertising
+:PROPERTIES:
+:ID:       CDCEB54C-2DCD-476D-A00F-45F5AFD13E3C
+:END:
 **** Supplementary Reading
 - prosocial: cdp 4: Graduated Responding to Helpful and Unhelpful Behavior
 - product management: marketing
@@ -302,6 +481,18 @@ Feature: Book a coaching session
   - Model and Meta-Model: Choose a complex skill or belief system you've wanted to understand (e.g., "how to be charismatic," "the mindset of an entrepreneur").
   - Part A (The NLP Model): Create a detailed NLP model of this skill, using strategies, T.O.T.E.s, values, and Meta-Programs.
   - Part B (The Mathematical Meta-Critique): Write a companion analysis of your own model. Use the concepts from this course to critique it. What are its core axioms (beliefs)? How does it use sets and relations? Where are its potential paradoxes or Gödelian blind spots? What is its "logic"? This final project demonstrates a true integration of both disciplines.
+***** TODO Unit 10.4: The Hard Question of Consciousness
+:PROPERTIES:
+:ID:       0A7EEF6F-45E9-46A7-9FC2-170FEE18C59B
+:END:
+***** TODO Unit 10.5: Awareness and Attention
+:PROPERTIES:
+:ID:       5E38EEF1-A5C0-4BB1-B5A8-F84995465944
+:END:
+***** TODO Unit 10.6: The Science of Consciousness?
+:PROPERTIES:
+:ID:       DFF936A6-4568-46F8-8E9D-CEADB2C059EB
+:END:
 **** Supplementary Reading
 - product management: law & policy
 - AOS: mindfulness in mind-body psychology
