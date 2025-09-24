@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function PromiseProtocolPage() {
   return (
     <div style={{
@@ -8,13 +10,13 @@ export default function PromiseProtocolPage() {
       lineHeight: '1.6'
     }}>
       <header style={{ marginBottom: '2rem' }}>
-        <a href="/" style={{ 
+        <Link href="/" style={{ 
           color: '#6B7280', 
           textDecoration: 'none',
           fontSize: '14px'
         }}>
           ← Back to Unrival
-        </a>
+        </Link>
         <h1 style={{ 
           fontFamily: 'var(--font-playfair-display), serif',
           fontSize: '2.5rem',
@@ -451,8 +453,8 @@ export default function PromiseProtocolPage() {
           textAlign: 'center'
         }}>
           Questions about implementation or integration?<br/>
-          <a href="mailto:protocol@unrival.com" style={{ color: '#1F6FEB', fontWeight: 'bold' }}>
-            protocol@unrival.com
+          <a href="mailto:dvdgdnjsph@gmail.com" style={{ color: '#1F6FEB', fontWeight: 'bold' }}>
+            Send an email
           </a>
         </div>
       </section>
