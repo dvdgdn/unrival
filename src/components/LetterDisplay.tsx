@@ -4,7 +4,6 @@ import Image from 'next/image';
 // Assuming these visual components exist to illustrate key concepts.
 import IcebergIllustration from './IcebergIllustration';
 import FourFrontsDiagram from './FourFrontsDiagram';
-import PromiseLifecycle from './PromiseLifecycle';
 import InlineInquiryCTA from './InlineInquiryCTA';
 import TrustBeforeAfter from './TrustBeforeAfter';
 
@@ -107,7 +106,6 @@ const LetterDisplay = () => {
             The Promise was our Trojan Horse—a simple gift that carried a revolutionary change within.
           </figcaption>
         </figure>
-        {/* The PromiseLifecycle component was missing in the last version you sent, adding it back */}
         <p>
           Think about it: throughout history, trust has been the most valuable yet unmeasurable currency. Politicians promise, corporations pledge, individuals commit—but accountability remained ethereal. The Public Promise changed that. It connected a person's inner commitment (<strong>Mindset</strong>) to their public actions (<strong>Behavior</strong>) and held them accountable in a way that rebuilt our collective trust (<strong>Culture</strong>) and reformed our institutions (<strong>Systems</strong>).
         </p>
