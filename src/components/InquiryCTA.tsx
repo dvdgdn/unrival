@@ -2,8 +2,8 @@
 
 // repurpose as a Futures CTA
 export default function InquiryCTA() {
-  const letterForm = 'https://unrival.link/letter';
-  const promiseForm = 'https://unrival.link/promise';
+  const letterForm = 'https://docs.google.com/forms/d/e/1FAIpQLSf05hYw4J6bXlnZ2BDVNP7ReGnujzoH_ADLWlUPc8mxLg_--w/viewform?utm_source=unrival_site&utm_medium=hero_btn&utm_campaign=letters_form';
+  const promiseForm = 'https://docs.google.com/forms/d/e/1FAIpQLSfyoP6yVdpITWUnsFnjq2uZZqQM-Va6QozZMGEMEbxo0VKscw/viewform?utm_source=unrival_site&utm_medium=hero_btn&utm_campaign=promises_form';
 
   // (Optional) swap these for pubhtml URLs once published:
   const lettersSheet = 'https://docs.google.com/spreadsheets/d/1d9CiBcqY3FN5RNtrC3HXpwMSpvLqFPCvNfmzYyYWmzY/edit?usp=sharing';

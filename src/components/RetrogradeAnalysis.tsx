@@ -150,7 +150,7 @@ const RetrogradeAnalysis = () => {
               Launch <strong>Converging Futures</strong> infrastructure:
               {' '}
               <a
-                href="https://unrival.link/letter"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSf05hYw4J6bXlnZ2BDVNP7ReGnujzoH_ADLWlUPc8mxLg_--w/viewform?utm_source=unrival_site&utm_medium=button&utm_campaign=letters_form"
                 target="_blank" rel="noopener noreferrer">Letters form</a>{' '}
               &middot;{' '}
               <a
@@ -158,7 +158,7 @@ const RetrogradeAnalysis = () => {
                 target="_blank" rel="noopener noreferrer">Letters ledger</a>{' '}
               &middot;{' '}
               <a
-                href="https://unrival.link/promise"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfyoP6yVdpITWUnsFnjq2uZZqQM-Va6QozZMGEMEbxo0VKscw/viewform?utm_source=unrival_site&utm_medium=button&utm_campaign=promises_form"
                 target="_blank" rel="noopener noreferrer">Promises form</a>{' '}
               &middot;{' '}
               <a
@@ -170,21 +170,7 @@ const RetrogradeAnalysis = () => {
               {/* Note: replaces the earlier "experimental public promise ledger" objective */}
             </li>
           </ul>
-<div className="early-metrics" style={{
-  background: '#F0F9FF',
-  border: '1px solid #0EA5E9',
-  padding: '12px',
-  margin: '16px 0',
-  borderRadius: '6px'
-}}>
-  <strong>Early Results (Sept 2025):</strong>
-  <ul style={{margin: '8px 0', paddingLeft: '20px'}}>
-    <li>12 coaches using the protocol</li>
-    <li>89% session punctuality rate (vs 67% baseline)</li>
-    <li>34% improvement in goal completion</li>
-  </ul>
-  <small><em>Live data updating weekly</em></small>
-</div>
+
 
           <h4>The Coalition Forms</h4>
           <p>A circle of hypnotists, recognizing their unique access to the unconscious mind's programming, convenes with behavioral scientists, product designers, civic innovators, and systems thinkers. They share a diagnosis: society isn't broken—it's successfully executing unconscious scripts that no one consciously wants. The iceberg metaphor becomes central: the conscious mind (12%) keeps trying to steer while the unconscious (88%) drives toward different destinations.</p>

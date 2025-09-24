@@ -28,17 +28,17 @@ export default function PromiseProtocolPage() {
           color: '#6B7280',
           marginBottom: '1rem'
         }}>
-          Version 0.1.0 • Production Pilot • September 2025
+          Version 0.1.0 • Development Phase • September 2025
         </div>
-<div style={{
-  background: '#FEF3C7',
-  border: '1px solid #F59E0B',
-  padding: '12px',
-  borderRadius: '6px',
-  fontSize: '14px'
-}}>
-  <strong>Current Status:</strong> Protocol development phase • Schema v0.1 in draft • Recruiting pilot cohort
-</div>
+        <div style={{
+          background: '#FEF3C7',
+          border: '1px solid #F59E0B',
+          padding: '12px',
+          borderRadius: '6px',
+          fontSize: '14px'
+        }}>
+          <strong>Current Status:</strong> Protocol development phase • Schema v0.1 in draft • Recruiting pilot cohort
+        </div>
       </header>
 
       <section style={{ marginBottom: '2rem' }}>
@@ -201,7 +201,7 @@ export default function PromiseProtocolPage() {
           borderBottom: '2px solid #E5E7EB',
           paddingBottom: '0.5rem'
         }}>
-          Public Metrics
+          Public Metrics Framework
         </h2>
 
         <div style={{
@@ -223,7 +223,7 @@ export default function PromiseProtocolPage() {
             fontFamily: '"SF Mono", Monaco, monospace',
             fontSize: '14px'
           }}>
-            cRI: 94.2% (LB: 89.1%, n=47, last 30d)
+            cRI: [X]% (LB: [Y]%, n=[Z], last 30d)
           </div>
           <p style={{ fontSize: '12px', color: '#6B7280', marginTop: '0.5rem' }}>
             Components: Punctuality • Duration • Follow-up • Renegotiation handling
@@ -249,7 +249,7 @@ export default function PromiseProtocolPage() {
             fontFamily: '"SF Mono", Monaco, monospace',
             fontSize: '14px'
           }}>
-            TR: 87% (last 90d)
+            TR: [X]% (last 90d)
           </div>
           <p style={{ fontSize: '12px', color: '#6B7280', marginTop: '0.5rem' }}>
             Badge: "Limited coverage" appears if TR &lt; 80%
@@ -287,24 +287,48 @@ export default function PromiseProtocolPage() {
           Individual session outcomes never published - only aggregate reliability scores.
         </div>
       </section>
-<section style={{ marginBottom: '2rem' }}>
-  <h2>Projected Results (Q2 2026)</h2>
-  <p style={{ fontStyle: 'italic', marginBottom: '1rem' }}>
-    Based on commitment device research and early modeling:
-  </p>
-  <div style={{ /* same grid styling */ }}>
-    <div style={{/* same green styling */}}>
-      <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#047857' }}>85-95%</div>
-      <div style={{ fontSize: '14px', color: '#374151' }}>Target cRI</div>
-      <div style={{ fontSize: '12px', color: '#6B7280' }}>vs 65-70% baseline</div>
-    </div>
-    {/* Similar updates for other metrics */}
-  </div>
-  <p style={{ fontSize: '12px', color: '#6B7280', marginTop: '1rem' }}>
-     Projections based on commitment device research and goal-setting psychology
 
-  </p>
-</section>
+      <section style={{ marginBottom: '2rem' }}>
+        <h2 style={{ 
+          fontFamily: 'var(--font-playfair-display), serif',
+          color: '#1F2937',
+          borderBottom: '2px solid #E5E7EB',
+          paddingBottom: '0.5rem'
+        }}>
+          Projected Results (Q2 2026)
+        </h2>
+        <p style={{ fontStyle: 'italic', marginBottom: '1rem' }}>
+          Based on commitment device research and early modeling:
+        </p>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '1rem',
+          margin: '1rem 0'
+        }}>
+          <div style={{
+            background: '#F0FDF4',
+            border: '1px solid #10B981',
+            borderRadius: '6px',
+            padding: '1rem',
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#047857' }}>85-95%</div>
+            <div style={{ fontSize: '14px', color: '#374151' }}>Target cRI</div>
+            <div style={{ fontSize: '12px', color: '#6B7280' }}>vs 65-70% baseline</div>
+          </div>
+
+          <div style={{
+            background: '#F0F9FF',
+            border: '1px solid #0EA5E9',
+            borderRadius: '6px',
+            padding: '1rem',
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#0369A1' }}>500+</div>
+            <div style={{ fontSize: '14px', color: '#374151' }}>Target Sessions</div>
+            <div style={{ fontSize: '12px', color: '#6B7280' }}>across 25-30 coaches</div>
+          </div>
 
           <div style={{
             background: '#FEF3C7',
@@ -313,11 +337,14 @@ export default function PromiseProtocolPage() {
             padding: '1rem',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#92400E' }}>34%</div>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#92400E' }}>25-35%</div>
             <div style={{ fontSize: '14px', color: '#374151' }}>Goal Completion</div>
-            <div style={{ fontSize: '12px', color: '#6B7280' }}>improvement vs control</div>
+            <div style={{ fontSize: '12px', color: '#6B7280' }}>improvement target</div>
           </div>
         </div>
+        <p style={{ fontSize: '12px', color: '#6B7280', marginTop: '1rem' }}>
+          Projections based on commitment device research and goal-setting psychology
+        </p>
       </section>
 
       <section style={{ marginBottom: '2rem' }}>
@@ -336,14 +363,14 @@ export default function PromiseProtocolPage() {
           borderRadius: '8px',
           padding: '1.5rem'
         }}>
-          <h3 style={{ marginTop: 0, color: '#374151' }}>Current Phase: Production Pilot</h3>
+          <h3 style={{ marginTop: 0, color: '#374151' }}>Current Phase: Development</h3>
           <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
-            <li>✅ Core standards implemented and tested</li>
-            <li>✅ Privacy controls and consent flows</li>
-            <li>✅ Basic coaching platform integration</li>
-            <li>🔄 Advanced renegotiation workflows (Q4 2025)</li>
-            <li>🔄 Multi-platform evidence collection (Q1 2026)</li>
-            <li>🔄 Public coach directory launch (Q1 2026)</li>
+            <li>🔄 Core standards specification (Q3 2025)</li>
+            <li>🔄 Privacy controls and consent flows (Q4 2025)</li>
+            <li>🔄 Basic platform integration (Q4 2025)</li>
+            <li>⏳ Pilot program launch (Q4 2025)</li>
+            <li>⏳ Multi-platform evidence collection (Q1 2026)</li>
+            <li>⏳ Public coach directory launch (Q1 2026)</li>
           </ul>
         </div>
 
@@ -355,8 +382,8 @@ export default function PromiseProtocolPage() {
           margin: '1rem 0',
           fontSize: '14px'
         }}>
-          <strong>Join the Pilot:</strong> We are accepting applications from coaches who want verifiable reliability metrics. 
-          Early participants help shape the final specification.
+          <strong>Join the Development:</strong> We are recruiting coaches and technical contributors who want to help build verifiable reliability metrics. 
+          Early participants help shape the specification.
         </div>
       </section>
 

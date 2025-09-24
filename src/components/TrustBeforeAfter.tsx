@@ -2,7 +2,7 @@ import React from 'react';
 
 const TrustBeforeAfter = () => {
   return (
-    <div style={{
+    <div className="trust-comparison" style={{
       display: 'flex',
       gap: '2rem',
       margin: '2rem 0',

@@ -10,7 +10,7 @@ const FloatingNav = () => {
 
       {/* Quick access: Add a Letter / Make a Promise */}
       <a
-        href="https://unrival.link/letter"
+        href="https://docs.google.com/forms/d/e/1FAIpQLSf05hYw4J6bXlnZ2BDVNP7ReGnujzoH_ADLWlUPc8mxLg_--w/viewform?utm_source=unrival_site&utm_medium=nav&utm_campaign=letters_form"
         target="_blank"
         rel="noopener noreferrer"
         className="external-link"
@@ -18,7 +18,7 @@ const FloatingNav = () => {
         Add Letter
       </a>
       <a
-        href="https://unrival.link/promise"
+        href="https://docs.google.com/forms/d/e/1FAIpQLSfyoP6yVdpITWUnsFnjq2uZZqQM-Va6QozZMGEMEbxo0VKscw/viewform?utm_source=unrival_site&utm_medium=nav&utm_campaign=promises_form"
         target="_blank"
         rel="noopener noreferrer"
         className="external-link"

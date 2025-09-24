@@ -159,21 +159,20 @@ const LetterDisplay = () => {
   </div>
 </div>
 
-{/* Early Results Box */}
-<div className="early-metrics" style={{
-  background: '#F0F9FF',
-  border: '1px solid #0EA5E9',
+<div className="development-status" style={{
+  background: '#FEF3C7',
+  border: '1px solid #F59E0B',
   padding: '12px',
   margin: '16px 0',
   borderRadius: '6px'
 }}>
-  <strong>Early Results (Sept 2025):</strong>
+  <strong>Development Status (Sept 2025):</strong>
   <ul style={{margin: '8px 0', paddingLeft: '20px'}}>
-    <li>12 coaches using the protocol</li>
-    <li>89% session punctuality rate (vs 67% baseline)</li>
-    <li>34% improvement in goal completion</li>
+    <li>Promise Schema v0.1 in draft</li>
+    <li>Recruiting 10-15 pilot coaches</li>
+    <li>First test sessions planned Q4 2025</li>
   </ul>
-  <small style={{fontStyle: 'italic'}}>Live data updating weekly</small>
+  <small style={{fontStyle: 'italic'}}>Target: 500+ tracked sessions by Q2 2026</small>
 </div>
 
 {/* Skepticism FAQ */}
