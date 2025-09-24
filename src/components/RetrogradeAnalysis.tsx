@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link'; // Add this import
+
 
 // Data inferred from the full text provided by the user.
 const timelineData = [
@@ -133,7 +135,52 @@ const RetrogradeAnalysis = () => {
               A synthesis of retrograde analyses applied to our letter from the future
             </a>
           </p>
-          
+<div className="methodology-note" style={{
+  background: '#F8FAFC',
+  border: '1px solid #E2E8F0',
+  borderRadius: '8px',
+  padding: '20px',
+  margin: '32px 0',
+  fontSize: '16px',
+  lineHeight: '1.5'
+}}>
+  <h4 style={{ 
+    margin: '0 0 12px 0', 
+    color: '#374151',
+    fontSize: '16px',
+    fontFamily: 'var(--font-playfair-display), serif'
+  }}>
+    Why This Is Not "Waterfall" (i.e. a rigid plan we are committing to)
+  </h4>
+  <p style={{ margin: '0 0 12px 0' }}>
+    This analysis was created through <strong>backwards induction</strong>—starting from a 
+    desirable 2027 outcome and working backward to identify what must have happened in each 
+    prior period. It{' '}
+    <Link 
+      href="https://docs.google.com/document/d/1DO2LJY-w3fO0a2QS9fVNeG_TmX8O4sWiDSGCtC2iBTM/edit?tab=t.e41udywix7fc"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ 
+        color: '#1F6FEB', 
+        textDecoration: 'underline',
+        fontWeight: '600'
+      }}
+    >
+      took about 5 minutes to generate
+    </Link>{' '}
+    and serves as a "litmus test" for what might be feasibly accomplished, not a rigid plan to execute.
+  </p>
+  <p style={{ margin: '0 0 12px 0' }}>
+    <strong>Critical difference from waterfall:</strong> Each step can be adjusted based on 
+    what you learn from act-sense-respond cycles. If "Launch three pilot programs" proves 
+    infeasible as described, adapt it. The value is in having a coherent direction that 
+    helps evaluate whether you're making meaningful progress toward the larger vision.
+  </p>
+  <p style={{ margin: '0' }}>
+    Think of this as <em>structured improvisation</em>—a framework that provides direction 
+    while remaining completely amenable to course corrections as reality provides feedback.
+  </p>
+</div>
           <h3>The Core Architecture</h3>
           <p>Between now and September 2027, a movement called "Unrival" will emerge and scale, fundamentally altering how society measures and builds trust. At its heart lies a deceptively simple innovation: the Public Promise—a standardized way to declare commitments, track their fulfillment, and create visible integrity metrics that rebuild social capital across all levels of society.</p>
           <p>The movement succeeds not through any single breakthrough but through the precise integration of four dimensions that previous reform efforts treated separately: individual mindset (the inner-individual), observable behavior (the outer-individual), collective culture (the inner-collective), and institutional systems (the outer-collective). This integration, combined with a focus on the right leverage points at the right time, creates cascading effects that transform isolated experiments into widespread cultural change.</p>

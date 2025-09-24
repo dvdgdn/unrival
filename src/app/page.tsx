@@ -17,6 +17,19 @@ export default function Home() {
         <p className="read-time">Estimated Read Time: 5 minutes</p>
 
         <section id="the-letter">
+	<div className="thought-experiment-notice" style={{
+  background: '#F0F9FF',
+  border: '1px solid #0EA5E9',
+  borderRadius: '8px',
+  padding: '16px',
+  margin: '24px 0',
+  fontSize: '14px'
+}}>
+  <strong>About this exercise:</strong> This isn't a prediction—it's a thought experiment. 
+  We're exploring what might be possible if certain approaches to trust and commitment 
+  actually worked at scale. Think of it as "what if we got our act together?" rather 
+  than "here's what will happen."
+</div>
           <LetterDisplay />
         </section>
 
